@@ -1,0 +1,419 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dimitris Syrros, Senior Front-end Engineer</title>
+<meta name="description" content="Senior front-end engineer and Tech Team Lead. Seven years across betting, banking and flight booking, and the CityJS talk on moving a company to React Hook Form.">
+<meta name="color-scheme" content="dark light">
+<meta name="theme-color" content="#472913">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Work+Sans:wght@400;600&display=swap" rel="stylesheet">
+<script>document.documentElement.classList.add('js');</script>
+<style>
+  /* ---------- Tokens: tobacco and olive ---------- */
+  :root {
+    --display: "Anton", Impact, "Arial Narrow", sans-serif;
+    --text: "Work Sans", Arial, sans-serif;
+
+    --step-small: clamp(0.8125rem, 0.79rem + 0.1vw, 0.875rem);
+    --step-body: clamp(1.0625rem, 1rem + 0.25vw, 1.1875rem);
+    --step-lead: clamp(1.25rem, 1.1rem + 0.7vw, 1.625rem);
+    --step-head: clamp(2.5rem, 1.2rem + 5vw, 5.5rem);
+
+    --bg: #472913;
+    --surface: #55321a;
+    --ink: #e4e0cf;          /* 10:1 on tobacco */
+    --muted: #c4b398;        /* 6.3:1 on tobacco */
+    --accent: #525e1b;       /* olive: the action */
+    --accent-ink: #e4e0cf;
+    --ochre: #c79a3e;  --ochre-ink: #2b170a;
+    --inverse: #e4e0cf; --inverse-ink: #472913;
+    --scrim: rgb(24 14 6 / .7);
+    --gutter: 1rem;
+    --section: 7rem;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #e4e0cf; --surface: #d6cfb6; --ink: #3b210f; --muted: #614a35;
+      --inverse: #472913; --inverse-ink: #e4e0cf;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #e4e0cf; --surface: #d6cfb6; --ink: #3b210f; --muted: #614a35;
+    --inverse: #472913; --inverse-ink: #e4e0cf;
+  }
+
+  /* ---------- Base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { margin: 0; background: var(--bg); color: var(--ink); font: 400 var(--step-body)/1.5 var(--text); }
+  h1, h2, h3, p, ul, figure { margin: 0; }
+  ul { padding: 0; list-style: none; }
+  a { color: inherit; text-underline-offset: .2em; }
+  img, video { display: block; max-width: 100%; }
+  :focus-visible { outline: 3px solid currentColor; outline-offset: 3px; }
+  [id] { scroll-margin-top: 1rem; }
+  .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .skip { position: absolute; left: var(--gutter); top: -100px; z-index: 20; padding: .75rem 1rem; background: var(--ink); color: var(--bg); }
+  .skip:focus { top: var(--gutter); }
+  .skip:not(:focus) { clip-path: inset(50%); width: 1px; height: 1px; padding: 0; overflow: hidden; white-space: nowrap; }
+  .wrap { padding-inline: var(--gutter); }
+  .display { font: 400 min(var(--step-head), 8.4vw)/.86 var(--display); letter-spacing: -.01em; text-transform: uppercase; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; min-height: 48px; padding: 0 1.25rem;
+    background: var(--accent); color: var(--accent-ink); font: 600 var(--step-body)/1 var(--text); text-decoration: none;
+    transition: transform .2s var(--ease), filter .2s;
+  }
+  .btn:hover { transform: translateY(-2px); filter: brightness(1.12); }
+  .btn:active { transform: translateY(1px); }
+  .logo { display: block; width: auto; }
+
+  /* ---------- Top bar ---------- */
+  .bar { position: relative; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding-block: .75rem; font-size: var(--step-small); }
+  .brand { font: 400 var(--step-lead)/1 var(--display); text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+  .bar nav ul { display: flex; align-items: center; gap: 1rem; }
+  .bar nav a:not(.btn) { min-height: 44px; display: inline-flex; align-items: center; text-decoration: none; }
+  .bar nav a:not(.btn):hover { text-decoration: underline; }
+  .bar .wide { display: none; }
+
+  /* ---------- Hero: a sentence split by a frame; the reel passes through it ---------- */
+  /* phones and tablets: no pinning; the reel steps through the frame on its own */
+  .hero { position: relative; }
+  .stage { position: relative; display: grid; align-content: start; gap: .75rem; padding: .5rem 0 3rem; }
+  .reel.auto { transition: transform .9s var(--ease); }
+  .hero h1 { display: contents; }
+  .half { font: 400 clamp(3.5rem, 21vw, 9rem)/.86 var(--display); text-transform: uppercase; letter-spacing: -.01em; position: relative; z-index: 2; }
+  .half span { display: block; }
+  .half-b { text-align: right; }
+  /* the window clips the reel to the frame plus two slivers on phones; on desktop it is the whole screen */
+  .window { --fw: calc(100vw - 2 * var(--gutter)); --fh: calc(var(--fw) * .75); --gap: 12px; --sliver: 28px;
+    position: relative; height: calc(var(--fh) + 2 * (var(--sliver) + var(--gap))); overflow: hidden; }
+  .reel { position: absolute; left: 50%; top: 50%; width: var(--fw); display: grid; gap: var(--gap);
+    transform: translate(-50%, calc(var(--fh) / -2 - var(--p, 0) * (var(--fh) + var(--gap)))); will-change: transform; }
+  .frame { position: relative; height: var(--fh); overflow: hidden; background: var(--surface); }
+  .frame img, .frame video { width: 100%; height: 100%; object-fit: cover; filter: grayscale(1) sepia(.35) contrast(1.05); }
+  .frame:not(.is-on) figcaption { visibility: hidden; }
+  .frame figcaption { position: absolute; left: 0; top: 0; padding: .4rem .7rem; background: var(--scrim); color: #e4e0cf; font-size: var(--step-small); }
+  .hero-foot { display: grid; gap: 1rem; align-content: start; }
+  .hero-foot p { max-width: 40ch; }
+
+  /* ---------- Flowing intro to the work ---------- */
+  .intro { padding-block: var(--section) 4rem; display: grid; gap: 1rem; }
+  .intro p { max-width: 46ch; font-size: var(--step-lead); line-height: 1.4; }
+
+  /* ---------- Work: full panels, one midline row ---------- */
+  /* phones: the panel grows with its notes; notes on top, credit and title row at the bottom, all in flow */
+  .panel { position: relative; min-height: 100svh; overflow: hidden; background: var(--surface); color: #e4e0cf; display: flex; flex-direction: column; justify-content: space-between; gap: 1rem; padding-block: 1.25rem; }
+  .panel > img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transform: scale(1.3); filter: grayscale(1) sepia(.35) contrast(1.05); }
+  .row {
+    position: relative; z-index: 1; background: var(--scrim);
+    display: grid; grid-template-columns: 1fr auto; gap: .2rem 1rem; padding: .8rem var(--gutter);
+  }
+  .row h3 { grid-column: 1 / -1; font: 400 var(--step-lead)/1 var(--display); text-transform: uppercase; letter-spacing: -.005em; }
+  .row .when, .row .fact { font-size: var(--step-small); }
+  .row .fact { text-align: right; }
+  .notes {
+    position: relative; margin-inline: var(--gutter); z-index: 1;
+    background: #472913; color: #e4e0cf; padding: 1.1rem 1.1rem 1.25rem; display: grid; gap: .75rem; max-width: 30rem; /* always tobacco: the logos are the on-dark set */
+  }
+  .notes .role { font-weight: 600; }
+  .notes ul { display: grid; gap: .45rem; }
+  .notes li { padding-left: 1rem; position: relative; }
+  .notes li::before { content: ""; position: absolute; left: 0; top: .55em; width: .4rem; height: .4rem; background: currentColor; }
+  .notes .logos { display: flex; align-items: center; gap: .6rem; font-size: var(--step-small); }
+  .notes .logos img { height: 22px; }
+  .credit { position: relative; align-self: flex-end; margin: auto var(--gutter) 0; z-index: 1; font-size: var(--step-small); background: var(--scrim); padding: .2rem .5rem; color: #e4e0cf; }
+
+  /* ---------- The talk: the live thing, on the ochre band ---------- */
+  .talk { position: relative; z-index: 1; background: var(--ochre); color: var(--ochre-ink); padding-block: var(--section); display: grid; gap: 2rem; }
+  .talk p { max-width: 52ch; }
+  .demo { display: grid; gap: 1.25rem; }
+  .demo label { display: block; font-weight: 600; margin-bottom: .35rem; }
+  .demo input {
+    width: 100%; min-height: 56px; padding: 0 1rem; border: 0; border-bottom: 4px solid var(--ochre-ink); border-radius: 0;
+    background: #d9b468; color: var(--ochre-ink); font: 400 var(--step-lead)/1 var(--text);
+  }
+  .demo input:focus-visible { outline: 3px solid var(--ochre-ink); outline-offset: 3px; }
+  .meters { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+  .meter { display: grid; gap: .25rem; align-content: start; }
+  .meter output { font: 400 min(var(--step-head), 8.4vw)/.86 var(--display); font-size: var(--step-head); font-variant-numeric: tabular-nums; }
+  .meter span { font-size: var(--step-small); font-weight: 600; }
+  .demo .note { font-size: var(--step-small); }
+
+  /* ---------- Contact: the email as display type ---------- */
+  .contact { position: relative; z-index: 1; min-height: 86svh; background: var(--inverse); color: var(--inverse-ink); display: grid; grid-template-rows: auto 1fr auto; gap: 2rem; padding-block: 2.5rem 1.5rem; }
+  .contact > p:first-child { max-width: 24ch; font-size: var(--step-lead); line-height: 1.35; }
+  .mail-line { align-self: center; font: 400 11.5vw/1.02 var(--display); text-transform: uppercase; }
+  .mail { display: block; font: inherit; text-transform: uppercase; letter-spacing: -.01em; text-decoration: none; overflow-wrap: anywhere; transition: color .2s; }
+  .mail span { display: block; }
+  .mail:hover { color: var(--accent); }
+  .corners { display: grid; gap: .75rem; }
+  .corners a { min-height: 44px; display: inline-flex; align-items: center; }
+
+  /* ---------- Footer: photograph half, menu half ---------- */
+  .site-foot { position: relative; z-index: 1; display: grid; background: var(--accent); color: var(--accent-ink); }
+  .foot-photo { height: 50svh; overflow: hidden; }
+  .foot-photo img { width: 100%; height: 100%; object-fit: cover; object-position: 50% 42%; transform: scale(1.6); transform-origin: 50% 45%; filter: grayscale(1) sepia(.35) contrast(1.05); }
+  .foot-menu { padding: 2rem var(--gutter) 1.5rem; display: grid; gap: 2rem; align-content: start; }
+  .menu { display: grid; gap: .6rem; }
+  .menu a { font: 400 min(var(--step-head), 8.4vw)/1 var(--display); text-transform: uppercase; text-decoration: none; display: inline-block; transition: transform .25s var(--ease); }
+  .menu a:hover { transform: translateX(12px); }
+  .foot-blocks { display: grid; gap: 1rem; }
+  .legal { display: grid; gap: .5rem; }
+  .legal p { max-width: 60ch; }
+
+  /* ---------- ≥ 40rem ---------- */
+  @media (min-width: 40rem) {
+    :root { --gutter: 2rem; }
+    .bar .wide { display: list-item; }
+    .corners { grid-template-columns: 1fr auto; align-items: end; }
+  }
+
+  /* ---------- ≥ 64rem ---------- */
+  @media (min-width: 64rem) {
+    :root { --section: 10rem; }
+    /* the two halves hold the vertical centre line; the frame sits between them on columns 5–8 */
+    .hero { height: calc(100svh + var(--steps, 3) * 55svh); }
+    .stage { position: sticky; top: 0; height: 100svh; overflow: hidden; display: block; padding: 0; }
+    .half { position: absolute; top: 50%; transform: translateY(-50%); font-size: min(7.2vw, 9rem); }
+    .half-a { left: var(--gutter); }
+    .half-b { right: var(--gutter); }
+    .window { position: absolute; inset: 0; height: auto; --fw: 35vw; --fh: calc(var(--fw) * 9 / 16); --gap: 24px; }
+    .hero-foot { position: absolute; left: var(--gutter); bottom: 2rem; max-width: calc(32.5vw - var(--gutter) - 1.5rem); z-index: 2; }
+
+
+    .panel { display: block; height: 100svh; min-height: 0; padding: 0; }
+    .row { position: absolute; left: 0; right: 0; top: calc(50% - 45px); height: 90px; align-items: center; grid-template-columns: 10% 1fr auto; padding: 0 var(--gutter); }
+    .row h3 { grid-column: 2; font-size: var(--step-lead); }
+    .row .when { grid-column: 1; grid-row: 1; }
+    .row .fact { grid-column: 3; }
+    .notes { position: absolute; left: var(--gutter); bottom: 2rem; margin: 0; max-width: 38rem; }
+    .notes ul { grid-template-columns: 1fr 1fr; column-gap: 1.5rem; }
+    .credit { position: absolute; right: var(--gutter); bottom: 2rem; margin: 0; }
+
+    .talk { grid-template-columns: minmax(0, 5fr) minmax(0, 7fr); column-gap: 5rem; align-items: start; }
+    .talk-copy { display: contents !important; }
+    .talk h2 { grid-column: 1 / -1; }
+
+    .contact { min-height: 100svh; padding-block: 3rem 2rem; }
+    .mail-line { font-size: min(7.2vw, 9rem); }
+    .mail span { display: inline; }
+
+    .site-foot { grid-template-columns: 1fr 1fr; min-height: 100svh; }
+    .foot-photo { height: auto; }
+    .foot-menu { padding: 5rem var(--gutter) 2rem 4rem; }
+    .menu a { font-size: min(var(--step-head), 8.4vw); }
+    .menu { gap: 1.25rem; }
+    .foot-blocks { grid-template-columns: 1fr 1fr; margin-top: 2rem; }
+  }
+
+  /* ---------- Motion ---------- */
+  .js [data-reveal] > * { opacity: .01; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); transition-delay: calc(var(--i, 0) * 80ms); }
+  .js [data-reveal].in > * { opacity: 1; transform: none; }
+  .js .half span { animation: rise 1s var(--ease) both; animation-delay: var(--d, 0s); }
+  .js .window { animation: fade 1.2s var(--ease) .35s both; }
+  @keyframes rise { from { opacity: 0; transform: translateY(40px); } }
+  @keyframes fade { from { opacity: 0; } }
+  .js .panel > img { transition: transform 1.6s var(--ease); }
+  .js .panel.in > img { transform: scale(1.18); }
+  .meter output.bump { animation: bump .3s var(--ease); }
+  @keyframes bump { from { transform: translateY(-6px); } }
+
+  @media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .js [data-reveal] > * { opacity: 1; transform: none; }
+    .hero { height: auto; }
+    .stage { position: relative; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+<header class="bar wrap">
+  <a class="brand" href="#main" aria-label="Dimitris Syrros, home">DS/</a>
+  <nav aria-label="Primary">
+    <ul>
+      <li><a href="#work">Work</a></li>
+      <li class="wide"><a href="#talk">The talk</a></li>
+      <li><a class="btn" href="#contact">Email me</a></li>
+    </ul>
+  </nav>
+</header>
+
+<main id="main">
+  <section class="hero wrap" aria-labelledby="hero-h" data-hero style="--steps:4">
+    <div class="stage">
+      <h1 id="hero-h">
+        <span class="half half-a"><span style="--d:.05s">Dimitris</span> <span style="--d:.15s">Syrros,</span></span>
+        <span class="window" aria-hidden="true">
+          <span class="reel" data-reel>
+            <figure class="frame is-on"><img src="img/road-dark.webp" alt="" width="1598" height="1785" fetchpriority="high" style="object-position:50% 40%"><figcaption>That’s me, on the road</figcaption></figure>
+            <figure class="frame"><img src="assets/lottery-draw-1776.jpg" alt="" width="1920" height="2543" loading="lazy" style="object-position:50% 30%"><figcaption>2019 · betting</figcaption></figure>
+            <figure class="frame"><img src="assets/banking-hall.jpg" alt="" width="1920" height="2560" loading="lazy" style="object-position:50% 25%"><figcaption>2022 · banking</figcaption></figure>
+            <figure class="frame"><img src="assets/hellinikon-olympic.jpg" alt="" width="1750" height="1068" loading="lazy"><figcaption>2024 · flight booking</figcaption></figure>
+            <figure class="frame"><video autoplay muted loop playsinline preload="metadata" poster="assets/solari-board-poster.jpg"><source src="assets/solari-board.webm" type="video/webm"></video><figcaption>Next · your team</figcaption></figure>
+          </span>
+        </span>
+        <span class="half half-b"><span style="--d:.25s">front-end</span> <span style="--d:.35s">lead</span></span>
+      </h1>
+      <div class="hero-foot">
+        <p>Senior front-end engineer and Tech Team Lead at Etraveli Group. Seven years across betting, banking and flight booking.</p>
+        <p><a class="btn" href="#contact">Email me</a></p>
+      </div>
+    </div>
+  </section>
+
+  <section id="work" aria-labelledby="work-h">
+    <div class="intro wrap" data-reveal>
+      <h2 class="display" id="work-h">From betting to banking to flight booking</h2>
+      <p>Seven years, multiple teams. Each stop below in one screen: where, when, and what I did there.</p>
+    </div>
+
+    <article class="panel" aria-labelledby="p-et">
+      <img src="assets/hellinikon-olympic.jpg" alt="" width="1750" height="1068" loading="lazy">
+      <div class="row"><span class="when"><time datetime="2024-01">2024</time>–now</span><h3 id="p-et">Etraveli Group</h3><span class="fact">Flight booking and payments</span></div>
+      <div class="notes">
+        <p class="role">Senior Frontend Developer, Tech Team Lead</p>
+        <ul>
+          <li>Tech Team Lead of the new Payments team</li>
+          <li>Built a new 3-D Secure flow and added payment methods</li>
+          <li>Leading the Redux Form → React Hook Form migration</li>
+          <li>Key engineer on the Dynamic Booking Flow</li>
+        </ul>
+        <span class="logos"><img class="logo" src="logos/etraveli-group-dark.svg" alt="Etraveli Group" width="1600" height="736" style="height:32px"></span>
+      </div>
+      <span class="credit">Hellinikon airport, Athens. Photo: Reinout van Rees, CC BY 2.0</span>
+    </article>
+
+    <article class="panel" aria-labelledby="p-ac">
+      <img src="assets/banking-hall.jpg" alt="" width="1920" height="2560" loading="lazy" style="object-position:50% 35%">
+      <div class="row"><span class="when"><time datetime="2022-02">2022</time>–<time datetime="2024-01">2024</time></span><h3 id="p-ac">Accenture</h3><span class="fact">E-banking, for Eurobank</span></div>
+      <div class="notes">
+        <p class="role">Application Development Senior Analyst</p>
+        <ul>
+          <li>Built Eurobank’s e-banking platform and its admin site</li>
+          <li>Reusable components in React and Redux</li>
+          <li>Peer reviews and onboarding new team members</li>
+          <li>Agile, side by side with the Product Owner</li>
+        </ul>
+        <span class="logos"><img class="logo" src="logos/accenture-dark.svg" alt="Accenture" width="204" height="56"><span>for</span><img class="logo" src="logos/eurobank-dark.svg" alt="Eurobank" width="174" height="23" style="height:16px"></span>
+      </div>
+      <span class="credit">Guardian Building, Detroit. Photo: w_lemay, CC BY-SA 2.0</span>
+    </article>
+
+    <article class="panel" aria-labelledby="p-nc">
+      <img src="assets/lottery-draw-1776.jpg" alt="" width="1920" height="2543" loading="lazy" style="object-position:50% 40%">
+      <div class="row"><span class="when"><time datetime="2019-04">2019</time>–<time datetime="2022-01">2022</time></span><h3 id="p-nc">Netcompany</h3><span class="fact">Betting, for Intralot</span></div>
+      <div class="notes">
+        <p class="role">Associate SW Engineer</p>
+        <ul>
+          <li>Interfaces for Intralot’s Canvas betting platform</li>
+          <li>React and Redux front ends</li>
+          <li>Faster caching and WebSockets in Go and Redis</li>
+          <li>PHP 7+ APIs following MVC</li>
+        </ul>
+        <span class="logos"><img class="logo" src="logos/netcompany-dark.svg" alt="Netcompany" width="882" height="135" style="height:16px"><span>for</span><img class="logo" src="logos/intralot-dark.svg" alt="Intralot" width="352" height="99" style="height:24px"></span>
+      </div>
+      <span class="credit">A lottery draw, Rome, 1776. Etching: Giuseppe Vasi, public domain</span>
+    </article>
+  </section>
+
+  <section class="talk wrap" id="talk" aria-labelledby="talk-h" data-reveal>
+    <div class="talk-copy" style="display:grid;gap:1.25rem;align-content:start">
+      <h2 class="display" id="talk-h">One form library, a whole company</h2>
+      <p>At Etraveli I’m leading the move from Redux Form to React Hook Form, and I spoke about it at CityJS. The short version: Redux Form sends every keystroke through the Redux store; React Hook Form leaves the input alone until you need its value.</p>
+    </div>
+    <div class="demo">
+      <div class="meters" aria-live="polite">
+        <div class="meter"><output data-rf>0</output><span>Redux actions with Redux Form</span></div>
+        <div class="meter"><output data-rhf>0</output><span>Form re-renders with React Hook Form</span></div>
+      </div>
+      <div>
+        <label for="demo-in">Type a passenger name</label>
+        <input id="demo-in" autocomplete="off" spellcheck="false" placeholder="e.g. Maria Papadopoulou" data-demo>
+      </div>
+      <p class="note">A simplified model of each library’s default behaviour, not a benchmark. Without JavaScript: one action per keystroke against none.</p>
+    </div>
+  </section>
+
+  <section class="contact wrap" id="contact" aria-labelledby="contact-h">
+    <p id="contact-h">Write about a front-end role, a team to lead, or a migration nobody wants to start.</p>
+    <p class="mail-line"><a class="mail" href="mailto:dimsyrr@gmail.com?subject=Hello%20Dimitris"><span>dimsyrr@</span><span>gmail.com</span></a></p>
+    <div class="corners">
+      <span>English (C2) and Greek (native)</span>
+      <a href="https://www.linkedin.com/in/dimsyrros/" target="_blank" rel="noopener noreferrer">LinkedIn<span class="sr-only"> (opens in a new tab)</span></a>
+    </div>
+  </section>
+</main>
+
+<footer class="site-foot">
+  <figure class="foot-photo"><img src="img/road-dark.webp" alt="Dimitris walking along a winding mountain road" width="1598" height="1785" loading="lazy"></figure>
+  <div class="foot-menu" data-reveal>
+    <a class="brand" href="#main">DS/ Dimitris Syrros</a>
+    <nav aria-label="Footer"><ul class="menu">
+      <li><a href="#work">Work</a></li>
+      <li><a href="#talk">The talk</a></li>
+      <li><a href="#contact">Contact</a></li>
+      <li><a href="https://www.linkedin.com/in/dimsyrros/" target="_blank" rel="noopener noreferrer">LinkedIn<span class="sr-only"> (opens in a new tab)</span></a></li>
+    </ul></nav>
+    <div class="foot-blocks">
+      <p><a href="mailto:dimsyrr@gmail.com">dimsyrr@gmail.com</a></p>
+      <p>Senior front-end engineer, Tech Team Lead</p>
+    </div>
+    <div class="legal">
+      <p>© 2026 Dimitris Syrros</p>
+      <p>Pictures and footage: <a href="https://commons.wikimedia.org/w/index.php?curid=82068617">“The Seconda Macchina for the Chinea of 1776”</a> by Giuseppe Vasi, <a href="https://creativecommons.org/publicdomain/zero/1.0/deed.en">CC0</a>; <a href="https://commons.wikimedia.org/w/index.php?curid=134289469">“Banking Hall, Guardian Building, Detroit”</a> by w_lemay, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC BY-SA 2.0</a>; <a href="https://commons.wikimedia.org/w/index.php?curid=5064069">“Olympics Airways aircraft at Hellinikon Airport”</a> by Reinout van Rees, <a href="https://creativecommons.org/licenses/by/2.0/">CC BY 2.0</a>; <a href="https://commons.wikimedia.org/wiki/File:Trenton_Transit_Center_Solari_board_video_July_2026.webm">“Trenton Transit Center Solari board video”</a> by 4300streetcar, <a href="https://creativecommons.org/licenses/by/4.0">CC BY 4.0</a>; all via Wikimedia Commons, toned.</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+  /* Entrances */
+  (function () {
+    var els = document.querySelectorAll('[data-reveal], .panel');
+    document.querySelectorAll('[data-reveal]').forEach(function (el) { [].forEach.call(el.children, function (c, i) { c.style.setProperty('--i', i); }); });
+    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (es) { es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } }); }, { threshold: .15 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+
+  /* The reel: the page's own scroll moves the strip through the frame; nothing is hijacked */
+  (function () {
+    var hero = document.querySelector('[data-hero]'), reel = document.querySelector('[data-reel]');
+    if (!hero || !reel || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    var n = reel.children.length, ticking = false, wide = matchMedia('(min-width: 64rem)'), step = 0, timer = 0;
+    function mark(i) { [].forEach.call(reel.children, function (f, k) { f.classList.toggle('is-on', k === i); }); }
+    /* narrow screens: step through the frames every few seconds, paused while the tab is hidden */
+    function auto() {
+      clearInterval(timer); reel.classList.toggle('auto', !wide.matches);
+      if (wide.matches) return update();
+      timer = setInterval(function () { if (document.hidden) return; step = (step + 1) % n; reel.style.setProperty('--p', step); mark(step); }, 2800);
+    }
+    wide.addEventListener('change', auto);
+    function update() {
+      ticking = false;
+      if (!wide.matches) return;
+      var r = hero.getBoundingClientRect(), run = r.height - innerHeight;
+      var t = run > 0 ? Math.min(1, Math.max(0, -r.top / run)) : 0;
+      reel.style.setProperty('--p', (t * (n - 1)).toFixed(4)); mark(Math.round(t * (n - 1)));
+    }
+    addEventListener('scroll', function () { if (!ticking) { ticking = true; requestAnimationFrame(update); } }, { passive: true });
+    addEventListener('resize', update); auto();
+  })();
+
+  /* The talk demo: count what each library does while you type */
+  (function () {
+    var inp = document.querySelector('[data-demo]'); if (!inp) return;
+    var rf = document.querySelector('[data-rf]'), rhf = document.querySelector('[data-rhf]'), n = 0;
+    inp.addEventListener('input', function () {
+      n++; rf.textContent = n;
+      rf.classList.remove('bump'); void rf.offsetWidth; rf.classList.add('bump');
+    });
+  })();
+</script>
+</body>
+</html>

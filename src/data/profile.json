@@ -1,0 +1,171 @@
+{
+  "seo": {
+    "title": "Dimitris Syrros — Senior Front-end Engineer (React, Next.js)",
+    "description": "Senior Front-end Engineer specializing in React.js, Next.js, TypeScript and Redux. Building fast, accessible, intuitive web applications.",
+    "lang": "en",
+    "locale": "en_US"
+  },
+  "person": {
+    "name": "Dimitris Syrros",
+    "jobTitle": "Senior Front-end Engineer",
+    "tagline": "I build fast, accessible interfaces with React.js, Next.js and TypeScript, and I care about performance as much as taste.",
+    "email": "dimsyrr@gmail.com",
+    "links": [
+      {
+        "label": "LinkedIn",
+        "url": "https://www.linkedin.com/in/dimsyrros/"
+      }
+    ]
+  },
+  "summary": "Results-driven Senior Front-end Engineer with years of hands-on experience in crafting intuitive user interfaces and web application development. Expertise in modern technologies including React.js, Next.js, and Redux, complemented by a deep understanding of the web application development life-cycle. Adept at collaborating closely with product owners, engineers, and diverse teams to drive product excellence. Passionate about optimizing front-end performance, continuous learning, and embracing new challenges to empower users with innovative software solutions.",
+  "skills": [
+    {
+      "category": "Expertise",
+      "items": [
+        "Front-End Development",
+        "Software Engineering",
+        "Responsive Design",
+        "App Development",
+        "Agile"
+      ]
+    },
+    {
+      "category": "Technical Skills",
+      "items": [
+        "React.js",
+        "Next.js",
+        "TypeScript",
+        "JavaScript",
+        "React Hook Form",
+        "Redux",
+        "Styled Components",
+        "SCSS",
+        "Mocha/Chai/Enzyme",
+        "Webpack"
+      ]
+    },
+    {
+      "category": "Interpersonal",
+      "items": [
+        "Team Work",
+        "Active Listening",
+        "Adaptability",
+        "Problem Solving",
+        "Conflict Resolution",
+        "Coaching",
+        "Client Relationship Management",
+        "Time Management"
+      ]
+    },
+    {
+      "category": "Tools & Platforms",
+      "items": [
+        "CI/CD",
+        "Jira",
+        "Git",
+        "Postman",
+        "JetBrains IDEs"
+      ]
+    }
+  ],
+  "languages": [
+    {
+      "name": "English",
+      "level": "Fluent (C2 Certification)"
+    },
+    {
+      "name": "Greek",
+      "level": "Native"
+    }
+  ],
+  "experience": [
+    {
+      "company": "Etraveli Group",
+      "shortName": "Etraveli",
+      "spotlight": ["Leading the Redux Form → React Hook Form migration", "Spoke at CityJS on the migration", "Key engineer on the Dynamic Booking Flow", "Tech Team Lead of the new Payments team"],
+      "logo": { "onDark": "/logos/etraveli-group-dark.svg", "onLight": "/logos/etraveli-group-light.svg" },
+      "role": "Senior Frontend Developer – Tech Team Lead",
+      "summary": "Tech Team Lead of the new Payments team, and leading the move from Redux Form to React Hook Form across the company.",
+      "start": "2024-01",
+      "end": null,
+      "highlights": [
+        "Tech Team Lead and founding member of the customer-facing Payments team.",
+        "Widened payment coverage with new payment methods, and designed and built a new 3-D Secure flow that enforces proper handling of payment failures. Completed the domain's move to TypeScript, clearing over 61% of its legacy JavaScript, alongside accessibility fixes and higher test coverage.",
+        "Leading the migration from Redux Forms to React Hook Form across the codebase, resolving a long-standing performance and maintainability issue affecting multiple teams. Presented the initiative at a CityJS Conference meetup, proudly representing the company.",
+        "Playing a key role in building a Dynamic Booking Flow, collaborating with cross-domain teams to align technical solutions with broader business objectives.",
+        "Reviewing peer code to uphold high-quality standards, and mentoring junior developers on best practices, code structure, and maintainable frontend development."
+      ]
+    },
+    {
+      "company": "Accenture",
+      "shortName": "Accenture",
+      "spotlight": ["Built Eurobank’s e-banking platform", "Reusable components in React and Redux", "Peer reviews and onboarding", "Agile, side by side with the Product Owner"],
+      "logo": { "onDark": "/logos/accenture-dark.svg", "onLight": "/logos/accenture-light.svg" },
+      "client": { "name": "Eurobank", "logo": { "onDark": "/logos/eurobank-dark.svg", "onLight": "/logos/eurobank-light.svg" } },
+      "role": "Application Development Senior Analyst",
+      "summary": "Built modular, reusable React and Redux components for Eurobank’s e-banking platform and its admin website.",
+      "start": "2022-02",
+      "end": "2024-01",
+      "description": "Worked on Eurobank's e-banking web platform and an associated admin website.",
+      "highlights": [
+        "Prioritized enhanced modularization and heightened component reusability leveraging React.js and Redux.",
+        "Pursued code improvements in tandem with feature development.",
+        "Conducted peer code reviews for quality assurance and mentored new team members on best practices.",
+        "Actively contributed to Agile ceremonies using established methodologies.",
+        "Collaborated closely with the Product Owner and Facilitator Team Leader.",
+        "Participated in preliminary development talks, facilitating seamless inter-departmental communication."
+      ]
+    },
+    {
+      "company": "Netcompany-Intrasoft",
+      "shortName": "Netcompany",
+      "spotlight": ["Interfaces for Intralot’s Canvas betting platform", "React and Redux front ends", "Faster caching and WebSockets in Go and Redis", "PHP 7+ APIs following MVC"],
+      "logo": { "onDark": "/logos/netcompany-dark.svg", "onLight": "/logos/netcompany-light.svg" },
+      "client": { "name": "Intralot", "logo": { "onDark": "/logos/intralot-dark.svg", "onLight": "/logos/intralot-light.svg" } },
+      "role": "Associate SW Engineer",
+      "summary": "Built interfaces for Intralot’s Canvas betting software and tuned its caching and WebSockets with Go and Redis.",
+      "start": "2019-04",
+      "end": "2022-01",
+      "description": "Integrated and enhanced Intralot's Canvas software for global national betting providers.",
+      "highlights": [
+        "Crafted interfaces utilizing React.js and Redux along with Styled Components and SASS.",
+        "Contributed to API development leveraging PHP 7+ and adhering to the MVC design pattern.",
+        "Optimized caching and WebSocket mechanisms through Golang and Redis implementations."
+      ],
+      "note": "Took a hiatus for mandatory army service at KEPYES from Jan 2020 to Sep 2020."
+    },
+    {
+      "company": "Centre of Information Technology Support of the Hellenic Army (KEPYES)",
+      "shortName": "KEPYES",
+      "hidden": true,
+      "role": "Software Engineer/Analyst",
+      "summary": "Built the admin and client apps of a multi-tenant system used by Greek military hospitals.",
+      "start": "2020-01",
+      "end": "2020-09",
+      "description": "Worked on a multi-tenant internal project used by Greek military hospitals.",
+      "highlights": [
+        "Developed both admin and client-side platforms using React.js (Redux, Ant Design/Semantic UI, SASS).",
+        "Designed and implemented new services with PHP 7+ (Symfony 2)."
+      ]
+    }
+  ],
+  "education": [
+    {
+      "institution": "Computer Engineering and Informatics Department (CEID), University of Patras",
+      "shortName": "University of Patras",
+      "hidden": true,
+      "degree": "Integrated Master's Degree",
+      "summary": "Integrated Master’s in Computer Engineering and Informatics, with a thesis on detecting cyber-bullying using machine learning.",
+      "start": "2012-09",
+      "end": "2019-04",
+      "grade": "7.04",
+      "thesis": {
+        "title": "Detecting Cyber-Bullying on Social Networks with Natural Language Processing and Machine Learning",
+        "highlights": [
+          "Employed supervised machine learning techniques, including Naive Bayes, SVM, and Random Forest, to identify and categorize instances of bullying and determine the author's role in user tweets.",
+          "Utilized Python, TensorFlow, and Pandas for data processing and algorithm implementation."
+        ]
+      }
+    }
+  ]
+}

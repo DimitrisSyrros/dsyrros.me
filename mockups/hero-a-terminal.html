@@ -1,0 +1,667 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Dimitris Syrros, Senior Front-end Engineer</title>
+<meta name="description" content="Senior Front-end Engineer specializing in React.js, Next.js, TypeScript and Redux. Building fast, accessible, intuitive web applications.">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#0b0c0e">
+<link rel="preload" href="fonts/anton-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="preload" href="fonts/work-sans-latin.woff2" as="font" type="font/woff2" crossorigin>
+<script>
+  document.documentElement.classList.add('js');
+</script>
+<style>
+  /* ---------- Fonts: self-hosted latin subsets (Work Sans is variable, one file covers 400–600) ---------- */
+  @font-face { font-family: "Anton"; font-style: normal; font-weight: 400; font-display: swap; src: url(fonts/anton-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+  @font-face { font-family: "Work Sans"; font-style: normal; font-weight: 100 900; font-display: swap; src: url(fonts/work-sans-latin.woff2) format("woff2"); unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+
+  /* ---------- Tokens ---------- */
+  :root {
+    --font: "Work Sans", Arial, sans-serif;
+    --display: "Anton", Impact, "Arial Narrow", sans-serif; /* compressed heavy capitals, from mockup C2 */
+
+    --s-display: clamp(3rem, 21vw, 6.5rem); /* phones: the name leads the first screen */
+    --s-head: clamp(2rem, 1.3rem + 3.2vw, 3.5rem);
+    --s-lead: clamp(1.125rem, 1rem + .5vw, 1.375rem);
+    --s-body: 1rem;
+    --s-small: .875rem;
+
+    --ground: #0b0c0e;
+    --surface: #15161a;
+    --ink: #eceae6;
+    --muted: #a3a19c;          /* 7.6:1 on ground */
+    --accent: #c6ff3d;         /* 15:1 on ground */
+    --accent-ink: #0b0c0e;
+
+    /* matte 3D surfaces: always dark, in both themes (client brief) */
+    --m-hi: #2a2c30;
+    --m-lo: #1a1b1e;
+    --m-ink: #eceae6;
+    --m-muted: #a3a19c;
+    --m-accent: #c6ff3d;
+    --m-shadow:
+      inset 0 1px 0 #ffffff14,
+      inset 0 -2px 0 #00000080,
+      0 1px 0 #000000cc,
+      0 12px 28px -10px #000000b3;
+    --m-pressed: inset 0 2px 5px #000000a6, inset 0 -1px 0 #ffffff0d;
+    --m-well: inset 0 2px 5px #000000b3, inset 0 -1px 0 #ffffff0f;
+    --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+
+    /* glass surfaces: translucent, blurred, lit edge; tinted per theme */
+    --g-fill: rgb(30 32 36 / .5);
+    --g-sheen: linear-gradient(135deg, rgb(255 255 255 / .08), rgb(255 255 255 / .01) 60%);
+    --g-edge: inset 0 1px 0 rgb(255 255 255 / .14), inset 0 0 0 1px rgb(255 255 255 / .06), 0 30px 60px -24px rgb(0 0 0 / .6);
+    --g-ink: #eceae6;
+    --g-muted: #b4b2ad;
+    --g-accent: #c6ff3d;
+    --g-rm: #ff8f7a;
+    --glow: rgb(198 255 61 / .32);
+
+    --gutter: 1rem;
+    --section: 6rem;
+    --ease: cubic-bezier(.16, 1, .3, 1);
+  }
+
+  /* ---------- Base ---------- */
+  *, *::before, *::after { box-sizing: border-box; }
+  html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+  body {
+    margin: 0; background: var(--ground); color: var(--ink);
+    font: 400 var(--s-body)/1.5 var(--font);
+    -webkit-font-smoothing: antialiased;
+    transition: background-color .3s, color .3s;
+  }
+  a { color: inherit; }
+  h1, h2, h3, p { margin: 0; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 6px; }
+  .sr-only {
+    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
+    overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
+  }
+  .skip {
+    position: absolute; left: var(--gutter); top: -100px; z-index: 10;
+    padding: .75rem 1rem; background: var(--accent); color: var(--accent-ink);
+    font-size: var(--s-small); text-decoration: none; border-radius: 8px;
+  }
+  .skip:focus { top: var(--gutter); }
+  .skip:not(:focus) { clip-path: inset(50%); width: 1px; height: 1px; padding: 0; overflow: hidden; white-space: nowrap; }
+  .wrap { padding-inline: var(--gutter); }
+  [id] { scroll-margin-top: 1rem; }
+
+  /* ---------- Matte 3D primitive (client brief: dark, matte, 3D) ---------- */
+  .matte {
+    position: relative; isolation: isolate;
+    background: linear-gradient(180deg, var(--m-hi), var(--m-lo)); /* taste-skill-ignore: client brief, matte 3D */
+    color: var(--m-ink);
+    box-shadow: var(--m-shadow); /* taste-skill-ignore: client brief, matte 3D */
+  }
+  .matte::after {
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+    background: var(--grain); opacity: .09; mix-blend-mode: overlay; pointer-events: none;
+  }
+  /* Glass primitive: for surfaces that hold content (panels, layers, bands); controls stay matte */
+  .glass {
+    position: relative; isolation: isolate; color: var(--g-ink);
+    background: var(--g-sheen), var(--g-fill); /* taste-skill-ignore: glass brief */
+    -webkit-backdrop-filter: blur(24px) saturate(160%); backdrop-filter: blur(24px) saturate(160%);
+    box-shadow: var(--g-edge); /* taste-skill-ignore: glass brief */
+  }
+  .glass::after {
+    content: ""; position: absolute; inset: 0; z-index: -1; border-radius: inherit;
+    background: var(--grain); opacity: .06; mix-blend-mode: overlay; pointer-events: none;
+  }
+  /* soft accent light behind the glass, so the blur has something to frost */
+  .glow { position: relative; isolation: isolate; overflow: clip; }
+  .glow::before, .glow::after {
+    content: ""; position: absolute; z-index: -1; border-radius: 50%; pointer-events: none;
+    background: radial-gradient(closest-side, var(--glow), transparent); /* taste-skill-ignore: glass brief */
+  }
+  .press { transition: transform .2s var(--ease), box-shadow .2s var(--ease), color .2s; }
+  .press:hover { transform: translateY(-2px); }
+  .press:active { transform: translateY(1px); box-shadow: var(--m-pressed); } /* taste-skill-ignore: client brief, matte 3D */
+
+  /* ---------- Top bar ---------- */
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-block: 1rem; }
+  .brand { font: 400 var(--s-lead)/1 var(--display); letter-spacing: -.01em; text-decoration: none; min-height: 44px; display: inline-flex; align-items: center; }
+  .brand span { color: var(--accent); }
+  .bar-right { display: flex; align-items: center; gap: .25rem; }
+  .links { display: none; list-style: none; margin: 0 .5rem 0 0; padding: 0; gap: 1.5rem; }
+  .links a { text-decoration: none; font-size: var(--s-body); min-height: 44px; display: inline-flex; align-items: center; }
+  .links a:hover { color: var(--accent); }
+
+
+  /* ---------- Hero ---------- */
+  .hero { min-height: calc(100svh - 76px); display: grid; align-content: end; gap: 2.5rem; padding-bottom: 2rem; }
+  h1 { font: 400 var(--s-display)/.86 var(--display); letter-spacing: -.01em; text-transform: uppercase; }
+  .line { display: block; overflow: hidden; padding-bottom: .06em; }
+  .line > span { display: block; }
+  .role { margin-top: 1.25rem; font-size: var(--s-lead); color: var(--accent); min-height: 1.6em; }
+  /* Split-flap role line, like an old departures board: one dark tile per character, each split
+     across the middle; a change drops the top flap over the next letter. Tiles stay dark in both themes. */
+  .board { display: inline-flex; gap: max(2px, .1em); text-transform: uppercase; font-weight: 600;
+    font-size: min(1.875rem, calc((100vw - 2 * var(--gutter)) / var(--cells, 25) / .86)); }
+  .board:not(.on) { text-transform: none; font-weight: 400; } /* no script: the plain line */
+  .cell { position: relative; width: .72em; height: 1.3em; perspective: 12em; color: var(--m-accent); }
+  .half, .flap { position: absolute; left: 0; right: 0; height: calc(50% - 1px); overflow: hidden; background: #232428; border-radius: 3px; }
+  .half > span, .flap > span { display: block; height: 1.3em; line-height: 1.3em; text-align: center; }
+  .top, .flap.t { top: 0; border-bottom-left-radius: 1px; border-bottom-right-radius: 1px; }
+  .bot, .flap.b { bottom: 0; border-top-left-radius: 1px; border-top-right-radius: 1px; background: #2a2b30; }
+  .bot > span, .flap.b > span { transform: translateY(calc(-50% - 1px)); }
+  .flap.t { transform-origin: 50% 100%; z-index: 2; backface-visibility: hidden; }
+  .flap.b { transform-origin: 50% 0; z-index: 2; backface-visibility: hidden; }
+  @keyframes blink { to { visibility: hidden; } }
+  .lede { margin-top: 1rem; max-width: 36ch; font-size: var(--s-lead); line-height: 1.45; }
+  .actions { margin-top: 1.75rem; display: flex; flex-wrap: wrap; gap: .75rem; }
+  .btn {
+    display: inline-flex; align-items: center; gap: .6rem; min-height: 52px; padding: 0 1.4rem;
+    border-radius: 999px; font-size: var(--s-body); text-decoration: none;
+  }
+  .btn:hover { color: var(--m-accent); }
+  .btn .dot { width: 9px; height: 9px; border-radius: 50%; background: var(--m-accent); }
+  /* LinkedIn's own button: brand blue pill with the "in" mark */
+  .btn.li { background: #0a66c2; color: #fff; font-weight: 600; padding-left: 1rem; }
+  .btn.li:hover { background: #004182; color: #fff; }
+  .btn.li .li-bug { width: 1.4rem; height: 1.4rem; stroke: none; }
+  .btn.li:focus-visible { outline-color: #70b5f9; }
+  /* copy email: the icon swaps to a tick for a moment after copying */
+  .copy .i-done { display: none; }
+  .copy.copied .i-copy { display: none; }
+  .copy.copied .i-done { display: block; color: var(--m-accent); }
+  .btn svg { width: 1rem; height: 1rem; fill: none; stroke: currentColor; stroke-width: 2; }
+
+  /* Hero poster: one version per theme, swapped like the logos */
+  /* cut-out collage (paper keyed out), so it sits on the page ground; the road fades into it */
+  /* phones: edge to edge, cancelling the page gutter */
+  .poster { margin: 0 calc(-1 * var(--gutter)); width: calc(100% + 2 * var(--gutter)); }
+  @media (min-width: 48rem) { .poster { margin: 0; justify-self: center; width: min(100%, 36rem); } }
+  .poster img {
+    display: block; width: 100%; height: auto;
+    -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); /* taste-skill-ignore: fade into ground */
+  }
+
+  /* ---------- Trusted by ---------- */
+  .trusted { border-radius: 22px; padding: 1rem; }
+  .trusted h2 { font-size: var(--s-body); color: var(--g-muted); font-weight: 600; }
+  .trusted summary {
+    list-style: none; cursor: pointer; margin-top: .75rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    min-height: 56px; padding: .5rem .5rem .5rem 1rem; border-radius: 16px;
+  }
+  .trusted summary::-webkit-details-marker { display: none; }
+  .names { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.1rem; }
+  .names .on-dark { display: block !important; } /* summary is always matte dark */
+  .names .lg-et { height: 32px; } .names .lg-ac { height: 20px; } .names .lg-nc { height: 15px; }
+  .toggle {
+    display: inline-flex; align-items: center; gap: .4rem; flex-shrink: 0;
+    font-size: var(--s-small); color: var(--m-accent);
+    height: 40px; padding: 0 .9rem; border-radius: 999px; background: #0e0f11; box-shadow: var(--m-well); /* taste-skill-ignore: client brief, matte 3D */
+  }
+  .t-labels { display: grid; } .t-labels > * { grid-area: 1/1; }
+  details[open] .t-open, details:not([open]) .t-close { visibility: hidden; }
+  .chev { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; transition: transform .3s var(--ease); }
+  details[open] .chev { transform: rotate(180deg); }
+  details[open] .names { display: none; }
+  .trusted details:not([open]) + .roles { display: none; }
+  .roles { list-style: none; margin: 0; padding: 1rem 0 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+  .roles li { display: grid; gap: .2rem; align-content: start; padding: .9rem 1rem; border-radius: 14px; }
+  .roles li.current { background: var(--ground); }
+  /* logos in one ink, so a row of brands reads as a single typographic line */
+  .co { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .9rem; min-height: 48px; margin-bottom: .35rem; }
+  /* full-colour logos: brand colours kept, only the neutral wordmark swaps per theme */
+  .logo { display: block; width: auto; }
+  .lg-et { height: 44px; } .lg-ac { height: 25px; } .lg-eu { height: 17px; } .lg-nc { height: 17px; } .lg-in { height: 26px; }
+  .client { display: inline-flex; align-items: center; gap: .9rem; }
+  .for { font-size: var(--s-small); color: var(--g-muted); }
+  .title { font-size: var(--s-small); line-height: 1.35; }
+  .years { font-size: var(--s-small); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .current .years { color: var(--accent); }
+
+  /* ---------- Timeline ---------- */
+  .work { padding-block: var(--section); }
+  .work::before { width: 36rem; height: 36rem; right: 8%; top: 35%; }
+  .work::after { width: 22rem; height: 22rem; right: 40%; top: 18rem; opacity: .7; }
+  .hero::before { width: 40rem; height: 40rem; right: -12rem; top: 10%; }
+  .hero::after { width: 24rem; height: 24rem; left: 30%; bottom: -6rem; opacity: .5; }
+  .work-head { display: grid; gap: 1rem; max-width: 40rem; }
+  h2.big { font: 400 var(--s-head)/.9 var(--display); letter-spacing: -.01em; text-transform: uppercase; }
+  .work-head h2.big { font-size: min(var(--s-head), 7.2vw); } /* the long heading keeps to two lines down to 320px */
+  .work-head p { font-size: var(--s-lead); line-height: 1.45; }
+
+  .tl { position: relative; list-style: none; margin: 3rem 0 0; padding: 0 0 0 2.25rem; display: grid; gap: .5rem; }
+  .tl-track { position: absolute; left: 13px; top: 8px; bottom: 8px; width: 4px; border-radius: 4px; background: var(--surface); }
+  .tl-fill { position: absolute; inset: 0; border-radius: inherit; background: var(--accent); transform-origin: top; }
+  .tl-item { position: relative; }
+  .tl-text { display: contents; }
+  .tl-btn {
+    all: unset; box-sizing: border-box; cursor: pointer; width: 100%;
+    display: grid; grid-template-columns: 4.5rem 1fr; gap: .1rem 1rem; align-items: baseline;
+    padding: .75rem 0; min-height: 52px; border-radius: 10px;
+  }
+  .tl-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+  .tl-dot {
+    position: absolute; left: calc(-2.25rem + 3px); top: 1rem; width: 24px; height: 24px; border-radius: 50%;
+    background: #2a2c30; box-shadow: inset 0 1px 0 #ffffff1f, inset 0 -2px 0 #00000080, 0 3px 8px #00000080; /* taste-skill-ignore: client brief, matte 3D */
+    display: grid; place-items: center; transition: transform .3s var(--ease);
+  }
+  .tl-dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--m-muted); transition: background .2s, transform .2s; }
+  .is-active .tl-dot::after { background: var(--m-accent); transform: scale(1.3); }
+  .tl-btn:hover .tl-dot { transform: scale(1.12); }
+  .tl-year { font: 400 var(--s-lead)/1.2 var(--display); font-variant-numeric: tabular-nums; color: var(--muted); }
+  .is-active .tl-year { color: var(--accent); }
+  .tl-co { font: 400 var(--s-lead)/1.2 var(--display); letter-spacing: -.005em; text-transform: uppercase; }
+  .tl-role { grid-column: 2; font-size: var(--s-small); color: var(--muted); }
+  .tl-body { border-radius: 22px; padding: 1.5rem 1.25rem; margin: .25rem 0 1rem; display: grid; gap: 1rem; }
+  .tl-body ul { margin: 0; padding: 0; list-style: none; display: grid; gap: 1rem; color: var(--g-ink); font-size: 1.125rem; line-height: 1.35; }
+  .tl-body .when { color: var(--g-accent); font-size: var(--s-small); }
+  .tl-story { color: var(--g-ink); font-size: 1.125rem; line-height: 1.5; max-width: 48ch; }
+  .js .tl-item:not(.is-active) .tl-body { display: none; }
+
+  /* Floating props on the timeline panels (client brief: skeuomorphic objects from each industry).
+     Phones: they sit in bands kept clear above and below the notes; desktop: they hang off the right edge. */
+  .tl-body { position: relative; padding-top: 4.25rem; padding-bottom: 4.5rem; }
+  .props { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+  /* each image carries its own shadow, so it is larger than the object: --w is the object's width,
+     --f/--pt/--ps/--pb the image's padding as fractions of it (from the render) */
+  .prop { position: absolute; display: block; height: auto; transform: rotate(var(--r, 0deg)); will-change: transform; /* shadow is in the image: the bob only moves a GPU layer */
+    width: calc(var(--w) * var(--f)); margin: calc(var(--w) * var(--pt) * -1) calc(var(--w) * var(--ps) * -1) calc(var(--w) * var(--pb) * -1);
+    animation: bob var(--dur, 6s) ease-in-out var(--del, 0s) infinite alternate; }
+  @keyframes bob { from { transform: translateY(0) rotate(var(--r, 0deg)); } to { transform: translateY(-10px) rotate(calc(var(--r, 0deg) + 3deg)); } }
+  .p-pass { --f: 1.2189; --ps: 0.1094; --pt: 0.0642; --pb: 0.1887; }
+  .p-passport { --f: 1.2847; --ps: 0.1424; --pt: 0.0814; --pb: 0.2441; }
+  .p-card { --f: 1.2157; --ps: 0.1078; --pt: 0.0637; --pb: 0.1887; }
+  .p-receipt { --f: 1.3345; --ps: 0.1673; --pt: 0.0982; --pb: 0.2909; }
+  .p-football { --f: 1.2193; --ps: 0.1097; --pt: 0.0627; --pb: 0.1880; }
+  .p-basket { --f: 1.2176; --ps: 0.1088; --pt: 0.0648; --pb: 0.1898; }
+  .p-pass { --w: 150px; top: .25rem; right: -.25rem; --r: -7deg; }
+  .p-passport { --w: 64px; bottom: -1.5rem; right: 1.25rem; --r: 11deg; --dur: 7s; --del: -2s; }
+  .p-card { --w: 124px; top: .25rem; right: -.25rem; --r: 8deg; }
+  .p-receipt { --w: 62px; bottom: -1.75rem; right: 1.25rem; --r: -5deg; --dur: 7.5s; --del: -3s; }
+  .p-football { --w: 60px; top: .25rem; right: .75rem; --dur: 5.5s; }
+  .p-basket { --w: 72px; bottom: -1.75rem; right: 1rem; --r: -6deg; --dur: 7s; --del: -4s; }
+
+  /* ---------- Contact + footer ---------- */
+  .contact { padding-block: var(--section); display: grid; gap: 1.75rem; }
+  .contact p { font-size: var(--s-lead); max-width: 40ch; }
+  /* billboard heading: rows of heavy caps, colour blocks absorb each row's leftover width so every row runs flush */
+  .bill { font: 400 clamp(2.5rem, 12vw, 9.5rem)/.86 var(--display); letter-spacing: -.01em; text-transform: uppercase; }
+  .bill-rows { display: grid; gap: .1em; }
+  .bill-row { display: flex; flex-wrap: wrap; align-items: center; gap: .08em .22em; }
+  .bk {
+    flex: 1 1 1.4em; min-width: 1.4em; height: .78em; display: grid; place-items: center;
+    color: #0b0c0e; font-size: 1em; letter-spacing: -.02em;
+  }
+  .bk-lime { background: #c6ff3d; }
+  .bk-fill { flex-basis: 0; min-width: 0; }
+  .bk-sun { background: #c4774f; }
+  .bk-sky { background: #7aa7ff; }
+  .bk-mark { flex: 0 0 auto; padding-inline: .12em; background: var(--ink); color: var(--ground); font-size: .62em; height: 1.26em; }
+  .bk svg { height: .42em; width: auto; fill: none; stroke: currentColor; stroke-width: 3.5; stroke-linecap: square; }
+  .bk-cursor { width: .16em; height: .46em; background: currentColor; animation: blink 1s steps(2, start) infinite; }
+  .js .bk { transform: scaleX(0); transform-origin: left; transition: transform .9s var(--ease); transition-delay: calc(.25s + var(--d, 0) * 90ms); }
+  .js .bill-row:nth-child(even) .bk { transform-origin: right; }
+  .js .contact.in .bk { transform: none; }
+  footer { padding: 1.5rem var(--gutter); background: var(--surface); }
+  .credits { margin-top: .75rem; max-width: 75ch; font-size: var(--s-small); color: var(--muted); }
+  .credits a { color: var(--ink); }
+  .legal { display: flex; flex-wrap: wrap; justify-content: space-between; gap: .5rem 1.5rem; font-size: var(--s-small); color: var(--muted); }
+
+  /* ---------- ≥ 30rem ---------- */
+
+  /* ---------- ≥ 48rem ---------- */
+  @media (min-width: 48rem) {
+    :root { --gutter: 3rem; --section: 9rem; --s-display: clamp(3rem, 13vw, 9.5rem); }
+    .links { display: flex; }
+    .roles { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 1rem; }
+    .co { min-height: 60px; }
+    .lg-et { height: 56px; } .lg-ac { height: 32px; } .lg-eu { height: 21px; } .lg-nc { height: 21px; } .lg-in { height: 33px; }
+    .trusted { padding: 1.5rem; }
+  }
+
+  /* ---------- ≥ 64rem ---------- */
+  @media (min-width: 64rem) {
+    :root { --section: 11rem; }
+    .hero { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: end; }
+    .hero-copy { padding-bottom: 1rem; }
+    /* wide screens: the collage becomes a background layer filling the right half,
+       bleeding to the edge and sliding under the frosted "Trusted by" band */
+    .poster {
+      position: absolute; z-index: 0; margin: 0; pointer-events: none;
+      right: 0; bottom: 10rem; width: min(46vw, (100svh - 76px - 10rem) * .89); /* road and shoes end just above the band */
+    }
+    /* a soft vignette on the left edge so the collage melts into the page ground (on top of the bottom fade) */
+    .poster img {
+      -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, transparent 0, rgb(0 0 0 / .55) 7%, #000 18%); /* taste-skill-ignore: fade into ground */
+      -webkit-mask-composite: source-in;
+      mask-image: linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, transparent 0, rgb(0 0 0 / .55) 7%, #000 18%); /* taste-skill-ignore: fade into ground */
+      mask-composite: intersect;
+    }
+    .hero-copy, .trusted { position: relative; z-index: 1; }
+    /* the band wraps to a taller block below 80rem, so lift the picture further */
+    @media (max-width: 79.99rem) { .poster { bottom: 13rem; width: min(46vw, (100svh - 76px - 13rem) * .89); } }
+    .trusted { grid-column: 1 / -1; display: grid; grid-template-columns: 9rem 1fr; align-items: start; gap: 2rem; padding: 1.75rem 2rem; }
+    .trusted h2 { padding-top: .9rem; }
+    .trusted details { display: none; }
+    .trusted .roles, .trusted details:not([open]) + .roles { display: grid; padding-top: 0; }
+
+
+    /* vertical timeline: spine on the left with labels alternating either side;
+       the selected entry's details sit in the right column, joined by a dashed connector.
+       All panels share one grid area, so nothing shifts when the selection changes. */
+    .js .tl {
+      --spine: 9.5rem; --gap: 2.5rem;
+      padding: 0; margin-top: 4rem; display: grid; align-items: center;
+      grid-template-columns: 25rem minmax(0, 1fr); column-gap: var(--gap); grid-auto-rows: minmax(8rem, auto);
+    }
+    .js .tl-track { left: calc(var(--spine) - 2px); top: 0; bottom: 0; }
+    .js .tl-item { display: contents; }
+    .js .tl-btn { grid-column: 1; position: relative; display: grid; grid-template-columns: calc(var(--spine) - 1.5rem) 3rem 1fr; column-gap: 0; padding: .75rem 0; }
+    .js .tl-dot { left: calc(var(--spine) - 12px); top: calc(50% - 12px); }
+    .js .tl-text { display: grid; gap: .15rem; grid-column: 3; grid-template-columns: auto 1fr; column-gap: 1rem; }
+    .js .tl-text > span { grid-column: 1; }
+    .js .tl-item:nth-child(even) .tl-text { margin-left: .5rem; }
+    .js .tl-item:nth-child(odd) .tl-text { margin-right: .5rem; }
+    .js .tl-item:nth-child(odd) .tl-text { grid-column: 1; justify-self: end; text-align: right; grid-template-columns: auto; }
+    .js .tl-role { grid-column: auto; }
+    /* dashed connector to the details column: from the dot when the label is on the left,
+       from the end of the label when it is on the right */
+    .js .tl-item:nth-child(odd).is-active .tl-btn::after,
+    .js .tl-item:nth-child(even).is-active .tl-text::after {
+      content: ""; height: 4px;
+      background: repeating-linear-gradient(90deg, var(--accent) 0 10px, transparent 10px 18px); /* taste-skill-ignore: dashed connector */
+    }
+    .js .tl-item:nth-child(odd).is-active .tl-btn::after { position: absolute; top: calc(50% - 2px); left: calc(var(--spine) + 12px); right: calc(-1 * var(--gap)); }
+    .js .tl-item:nth-child(even).is-active .tl-text::after { grid-column: 2; grid-row: 1 / span 3; align-self: center; margin-right: calc(-1 * var(--gap)); }
+    .js .tl-body { grid-column: 2; grid-row: 1 / span var(--count); align-self: stretch; margin: 0; padding: 2.5rem 3rem 4rem; align-content: start; gap: 1.75rem; }
+    .js .tl-item:not(.is-active) .tl-body { display: grid; visibility: hidden; }
+    .js .tl-body ul { row-gap: 1.5rem; font-size: clamp(1.375rem, .9rem + 1vw, 1.875rem); }
+    .js .tl-body ul, .js .tl-body .when, .js .tl-story { padding-right: clamp(8rem, 15vw, 15rem); }
+    .js .tl-story { font-size: clamp(1.25rem, 1rem + .45vw, 1.5rem); max-width: none; }
+    .p-pass { --w: clamp(200px, 20vw, 320px); top: -2.75rem; right: -2.25rem; }
+    .p-passport { --w: clamp(110px, 11vw, 170px); bottom: -3rem; right: 3rem; }
+    .p-card { --w: clamp(190px, 18vw, 280px); top: -2.75rem; right: -2.25rem; }
+    .p-receipt { --w: clamp(100px, 9vw, 140px); bottom: -3rem; right: 3rem; }
+    .p-football { --w: clamp(96px, 9vw, 145px); top: -3rem; right: clamp(7rem, 12vw, 12rem); }
+    .p-basket { --w: clamp(108px, 10vw, 160px); bottom: -3rem; right: clamp(4.5rem, 9vw, 9rem); }
+    .js .tl-body .when { font-size: var(--s-body); }
+  }
+
+  @media (min-width: 80rem) {
+    /* rail and panel sit together as one centred unit */
+    .js .tl { --spine: 10rem; grid-template-columns: 26rem minmax(0, 1fr); max-width: 88rem; margin-inline: auto; }
+    .js .tl-body { padding: 3.5rem 4rem; }
+  }
+
+  /* ---------- Motion ---------- */
+  .js .rise { animation: rise .9s var(--ease) both; animation-delay: var(--d, 0s); }
+  .js .line > span { animation: mask 1s var(--ease) both; animation-delay: var(--d, 0s); }
+  @keyframes rise { from { opacity: .01; transform: translateY(24px); } }
+  @keyframes mask { from { transform: translateY(105%); } }
+  .js [data-reveal] > * { opacity: .01; transform: translateY(24px); transition: opacity .8s var(--ease), transform .8s var(--ease); transition-delay: calc(var(--i, 0) * 80ms); }
+  .js [data-reveal].in > * { opacity: 1; transform: none; }
+  .js .tl-fill { transform: scaleY(0); transition: transform 1.4s var(--ease); }
+  .js .tl.in .tl-fill { transform: none; }
+  /* flip on open: phones flip down from the row, wide screens turn the card over */
+  .js .tl.flip .is-active .tl-body { transform-origin: top; animation: flip-down .55s var(--ease) both; }
+  @keyframes flip-down { from { opacity: 0; transform: perspective(1200px) rotateX(-70deg); } }
+  @media (min-width: 64rem) {
+    .js .tl.flip .is-active .tl-body { transform-origin: center; animation: flip-in .6s var(--ease) .2s both; }
+    .js .tl.flip .was-active .tl-body { transform-origin: center; animation: flip-out .2s var(--ease) both; }
+    @keyframes flip-in { from { opacity: 0; transform: perspective(1600px) rotateX(90deg); } }
+    @keyframes flip-out { from { visibility: visible; } to { visibility: hidden; opacity: 0; transform: perspective(1600px) rotateX(-90deg); } }
+  }
+  .js .tl-item > * { opacity: .01; transition: opacity .6s var(--ease); transition-delay: calc(.2s + var(--i, 0) * 140ms); }
+  .js .tl.in .tl-item > * { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    html { scroll-behavior: auto; }
+    *, *::before, *::after { animation: none !important; transition: none !important; }
+    .js [data-reveal] > *, .js .tl-item > * { opacity: 1; transform: none; }
+    .js .bk { transform: none; }
+    .js .tl-fill { transform: none; }
+  }
+</style>
+</head>
+<body>
+<a class="skip" href="#main">Skip to main content</a>
+
+
+<header class="bar wrap">
+  <a class="brand" href="#main" aria-label="Dimitris Syrros, home">DS<span>/</span></a>
+  <div class="bar-right">
+    <nav aria-label="Primary">
+      <ul class="links">
+        <li><a href="#work">Work</a></li>
+        <li><a href="#contact">Contact</a></li>
+        <li><a href="https://www.linkedin.com/in/dimsyrros/" target="_blank" rel="noopener noreferrer">LinkedIn<span class="sr-only"> (opens in a new tab)</span></a></li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<main id="main">
+  <section class="hero wrap glow" aria-labelledby="hero-name">
+    <div class="hero-copy">
+      <h1 id="hero-name">
+        <span class="line"><span style="--d:.1s">Dimitris</span></span>
+        <span class="line"><span style="--d:.21s">Syrros</span></span>
+      </h1>
+      <p class="role rise" style="--d:.45s">
+        <span class="board" aria-hidden="true" data-flap>Senior front-end engineer</span>
+        <span class="sr-only">Senior front-end engineer</span>
+      </p>
+      <p class="lede rise" style="--d:.55s">I build fast, accessible interfaces with React.js, Next.js and TypeScript, and I care about performance as much as taste.</p>
+    </div>
+
+    <figure class="poster rise" style="--d:.35s">
+      <img class="on-dark" src="img/road-dark.webp" alt="Dimitris walking along a winding mountain road under a large orange sun" width="1598" height="1785" fetchpriority="high">
+    </figure>
+
+    <section class="trusted glass rise" style="--d:.75s" aria-labelledby="trusted-h">
+      <h2 id="trusted-h">Trusted by</h2>
+      <details data-trusted>
+        <summary class="matte press">
+          <span class="names" aria-hidden="true"><img class="logo on-dark lg-et" src="logos/etraveli-group-dark.svg" alt="" width="1600" height="736"><img class="logo on-dark lg-ac" src="logos/accenture-dark.svg" alt="" width="204" height="56"><img class="logo on-dark lg-nc" src="logos/netcompany-dark.svg" alt="" width="882" height="135"></span>
+          <span class="toggle">
+            <span class="t-labels" aria-hidden="true"><span class="t-open">Show roles</span><span class="t-close">Hide roles</span></span>
+            <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6"/></svg>
+            <span class="sr-only">Roles and dates</span>
+          </span>
+        </summary>
+      </details>
+      <ul class="roles" id="trusted-roles">
+        <li class="current"><span class="co"><img class="logo on-dark lg-et" src="logos/etraveli-group-dark.svg" alt="Etraveli Group" width="1600" height="736"></span><span class="title">Senior Frontend Developer – Tech Team Lead</span><span class="years"><time datetime="2024-01">2024</time>–now</span></li>
+        <li><span class="co"><img class="logo on-dark lg-ac" src="logos/accenture-dark.svg" alt="Accenture" width="204" height="56"><span class="client"><span class="for">for</span><img class="logo on-dark lg-eu" src="logos/eurobank-dark.svg" alt="Eurobank" width="174" height="23"></span></span><span class="title">Application Development Senior Analyst</span><span class="years"><time datetime="2022-02">2022</time>–<time datetime="2024-01">2024</time></span></li>
+        <li><span class="co"><img class="logo on-dark lg-nc" src="logos/netcompany-dark.svg" alt="Netcompany" width="882" height="135"><span class="client"><span class="for">for</span><img class="logo on-dark lg-in" src="logos/intralot-dark.svg" alt="Intralot" width="352" height="99"></span></span><span class="title">Associate SW Engineer</span><span class="years"><time datetime="2019-04">2019</time>–<time datetime="2022-01">2022</time></span></li>
+      </ul>
+    </section>
+  </section>
+
+  <section class="work wrap glow" id="work" aria-labelledby="work-h">
+    <div class="work-head" data-reveal>
+      <h2 class="big" id="work-h">From betting to banking to flight booking</h2>
+      <p>Seven years, multiple teams. Hover or tap a dot to see what I did there.</p>
+    </div>
+
+    <ol class="tl" data-tl style="--count:3">
+      <li class="tl-track" aria-hidden="true"><span class="tl-fill"></span></li>
+      <li class="tl-item" data-tl-item data-current style="--i:0">
+        <button class="tl-btn" type="button" aria-expanded="false" aria-controls="tl-a3">
+          <span class="tl-dot" aria-hidden="true"></span>
+          <span class="tl-text"><span class="tl-year">2024</span><span class="tl-co">Etraveli Group</span><span class="tl-role">Senior Frontend Developer, Tech Team Lead</span></span>
+        </button>
+        <div class="tl-body glass" id="tl-a3">
+          <div class="props" aria-hidden="true"><img class="prop photo p-pass" src="assets/props/user/shadow/pass.png" alt="" width="646" height="410" loading="lazy" decoding="async"><img class="prop photo p-passport" src="assets/props/user/shadow/passport.png" alt="" width="379" height="479" loading="lazy" decoding="async"></div>
+          <span class="when"><time datetime="2024-01">Jan 2024</time> to now</span>
+          <p class="tl-story">Started as a developer, now Tech Team Lead of the new Payments frontend team. I’m leading the Redux Form → React Hook Form migration, and told a CityJS meetup how it’s going. I’ve worked extensively on moving the codebase from JavaScript to TypeScript, was a key engineer on the new Dynamic Booking Flow, and built a 3-D Secure flow that makes sure payment failures are handled properly.</p>
+        </div>
+      </li>
+      <li class="tl-item" data-tl-item style="--i:1">
+        <button class="tl-btn" type="button" aria-expanded="false" aria-controls="tl-a2">
+          <span class="tl-dot" aria-hidden="true"></span>
+          <span class="tl-text"><span class="tl-year">2022</span><span class="tl-co">Accenture</span><span class="tl-role">Senior Analyst</span></span>
+        </button>
+        <div class="tl-body glass" id="tl-a2">
+          <div class="props" aria-hidden="true"><img class="prop photo p-card" src="assets/props/user/shadow/card.png" alt="" width="496" height="341" loading="lazy" decoding="async"><img class="prop photo p-receipt" src="assets/props/user/shadow/receipt.png" alt="" width="367" height="533" loading="lazy" decoding="async"></div>
+          <span class="when"><time datetime="2022-02">Feb 2022</time>–<time datetime="2024-01">Jan 2024</time></span>
+          <p class="tl-story">Two years on Eurobank’s e-banking platform and its admin site, building modular, reusable React and Redux components that new features could stand on. I improved the code as I shipped, reviewed my peers’ work, helped new team members find their feet, and worked side by side with the Product Owner from the first development talks onward.</p>
+        </div>
+      </li>
+      <li class="tl-item" data-tl-item style="--i:2">
+        <button class="tl-btn" type="button" aria-expanded="false" aria-controls="tl-a1">
+          <span class="tl-dot" aria-hidden="true"></span>
+          <span class="tl-text"><span class="tl-year">2019</span><span class="tl-co">Netcompany</span><span class="tl-role">Associate SW Engineer</span></span>
+        </button>
+        <div class="tl-body glass" id="tl-a1">
+          <div class="props" aria-hidden="true"><img class="prop photo p-football" src="assets/props/user/shadow/football.png" alt="" width="467" height="475" loading="lazy" decoding="async"><img class="prop photo p-basket" src="assets/props/user/shadow/basketball.png" alt="" width="526" height="540" loading="lazy" decoding="async"></div>
+          <span class="when"><time datetime="2019-04">Apr 2019</time>–<time datetime="2022-01">Jan 2022</time></span>
+          <p class="tl-story">Where it started: interfaces for Intralot’s Canvas, the betting software behind national betting providers around the world. I built front ends in React and Redux with Styled Components and SASS, wrote PHP 7+ APIs on the MVC pattern, and made caching and WebSockets faster with Go and Redis.</p>
+        </div>
+      </li>
+    </ol>
+  </section>
+
+  <section class="contact wrap" id="contact" aria-labelledby="contact-h" data-reveal>
+    <h2 class="bill" id="contact-h">
+      <span class="sr-only">Let’s build something that is a joy to use.</span>
+      <span class="bill-rows" aria-hidden="true">
+        <span class="bill-row"><span>Let’s</span> <span>build</span> <span class="bk bk-lime" style="--d:0"><span class="bk-cursor"></span></span></span>
+        <span class="bill-row"><span class="bk bk-sun" style="--d:1"><svg viewBox="0 0 48 24"><path d="M14 4 4 12l10 8M34 4l10 8-10 8M27 2l-6 20"/></svg></span> <span>something</span></span>
+        <span class="bill-row"><span>that</span> <span>is</span> <span>a</span> <span class="bk bk-sky" style="--d:2"></span></span>
+        <span class="bill-row"><span class="bk bk-mark" style="--d:3">DS/</span> <span class="bk bk-lime bk-fill" style="--d:4"></span> <span>joy</span> <span>to</span> <span>use.</span></span>
+      </span>
+    </h2>
+    <p>I’m happy to talk about front-end roles, migrations and performance work.</p>
+    <div class="actions">
+      <a class="btn li press" href="https://www.linkedin.com/in/dimsyrros/" target="_blank" rel="noopener noreferrer">
+        <svg class="li-bug" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="4" fill="#fff"/><path fill="#0a66c2" d="M5.3 9.2h2.9v9.4H5.3zM6.8 4.6a1.7 1.7 0 1 1 0 3.4 1.7 1.7 0 0 1 0-3.4zM10.1 9.2h2.8v1.3c.4-.7 1.4-1.5 2.8-1.5 3 0 3.5 2 3.5 4.5v5.1h-2.9v-4.5c0-1.1 0-2.5-1.5-2.5s-1.8 1.2-1.8 2.4v4.6h-2.9z"/></svg>
+        Follow me on LinkedIn<span class="sr-only"> (opens in a new tab)</span>
+      </a>
+      <a class="btn matte press copy" href="mailto:dimsyrr@gmail.com?subject=Hello%20Dimitris" data-copy="dimsyrr@gmail.com">
+        <svg class="i-copy" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V6a2 2 0 0 1 2-2h8"/></svg>
+        <svg class="i-done" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg>
+        <span data-copy-label>Copy email</span>
+      </a>
+      <span class="sr-only" role="status" data-copy-status></span>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="legal"><span>Senior front-end engineer</span><span>© 2026 Dimitris Syrros</span></div>
+</footer>
+
+<script>
+  /* Copy email: copies the address and says so; without script or clipboard access it stays a mailto link */
+  (function () {
+    var a = document.querySelector('[data-copy]'); if (!a || !navigator.clipboard) return;
+    var label = a.querySelector('[data-copy-label]'), status = document.querySelector('[data-copy-status]'), t = 0;
+    a.addEventListener('click', function (e) {
+      e.preventDefault();
+      navigator.clipboard.writeText(a.getAttribute('data-copy')).then(function () {
+        a.classList.add('copied'); label.textContent = 'Email copied'; status.textContent = 'Email address copied to the clipboard';
+        clearTimeout(t); t = setTimeout(function () { a.classList.remove('copied'); label.textContent = 'Copy email'; status.textContent = ''; }, 2200);
+      }, function () { location.href = a.href; });
+    });
+  })();
+
+  /* Section entrances + timeline reveal */
+  (function () {
+    var els = document.querySelectorAll('[data-reveal], [data-tl]');
+    els.forEach(function (el) { [].forEach.call(el.children, function (c, i) { if (!c.style.getPropertyValue('--i')) c.style.setProperty('--i', i); }); });
+    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
+    }, { threshold: .2 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+
+  /* Timeline: hover, focus or tap a dot to open its details */
+  (function () {
+    document.querySelectorAll('[data-tl]').forEach(function (tl) {
+      var items = [].slice.call(tl.querySelectorAll('[data-tl-item]'));
+      var hover = matchMedia('(hover: hover)');
+      var set = function (li) {
+        if (li.classList.contains('is-active')) return;
+        items.forEach(function (x) {
+          var on = x === li;
+          x.classList.toggle('was-active', x.classList.contains('is-active'));
+          x.classList.toggle('is-active', on);
+          x.querySelector('.tl-btn').setAttribute('aria-expanded', String(on));
+        });
+      };
+      items.forEach(function (li) {
+        var b = li.querySelector('.tl-btn');
+        li.addEventListener('mouseenter', function () { if (hover.matches) set(li); });
+        b.addEventListener('focus', function () { set(li); });
+        b.addEventListener('click', function () { set(li); });
+      });
+      set(items.filter(function (x) { return x.hasAttribute('data-current'); })[0] || items[0]);
+      tl.classList.add('flip');
+    });
+  })();
+
+  /* Split-flap role line: every tile riffles through a few letters before it lands on the next word,
+     the way a station board does. Static under reduced motion; plain text without script. */
+  (function () {
+    var board = document.querySelector('[data-flap]'); if (!board) return;
+    var words = [board.textContent, 'Tech Team Lead', 'Legacy code whisperer', 'Bridge to product', 'CityJS speaker', 'Slop detector'];
+    var CH = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.'/";
+    var n = Math.max.apply(null, words.map(function (w) { return w.length; }));
+    var pad = function (w) { w = w.toUpperCase(); while (w.length < n) w += ' '; return w; };
+    var still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+    board.textContent = ''; board.style.setProperty('--cells', n); board.classList.add('on');
+    var cells = pad(words[0]).split('').map(function (c) {
+      var cell = document.createElement('span'); cell.className = 'cell';
+      cell.innerHTML = '<span class="half top"><span></span></span><span class="half bot"><span></span></span>';
+      board.appendChild(cell);
+      var top = cell.firstChild.firstChild, bot = cell.lastChild.firstChild;
+      top.textContent = bot.textContent = c;
+      return { el: cell, top: top, bot: bot, ch: c };
+    });
+    if (still) return;
+    var HALF = 55; /* ms per half of a flap */
+    function flip(cell, next) {
+      return new Promise(function (done) {
+        var old = cell.ch; cell.ch = next;
+        var t = document.createElement('span'); t.className = 'flap t'; t.innerHTML = '<span></span>'; t.firstChild.textContent = old;
+        var b = document.createElement('span'); b.className = 'flap b'; b.innerHTML = '<span></span>'; b.firstChild.textContent = next;
+        cell.top.textContent = next; /* the new top waits under the falling flap */
+        cell.el.appendChild(t); cell.el.appendChild(b);
+        b.style.transform = 'rotateX(90deg)';
+        t.animate([{ transform: 'rotateX(0)' }, { transform: 'rotateX(-90deg)', filter: 'brightness(.6)' }], { duration: HALF, easing: 'ease-in', fill: 'forwards' }); /* taste-skill-ignore: a falling flap accelerates */
+        b.animate([{ transform: 'rotateX(90deg)', filter: 'brightness(1.4)' }, { transform: 'rotateX(0)' }], { duration: HALF, delay: HALF, easing: 'ease-out', fill: 'forwards' })
+          .finished.then(function () { cell.bot.textContent = next; t.remove(); b.remove(); done(); });
+      });
+    }
+    /* the last few letters before the target, in the board's own order, so each tile riffles then lands */
+    function path(from, to) {
+      var a = CH.indexOf(from), z = CH.indexOf(to); if (a < 0) a = 0; if (z < 0) z = 0;
+      if (a === z) return [];
+      var dist = (z - a + CH.length) % CH.length, k = Math.min(dist, 4 + Math.floor(Math.random() * 5)), out = [];
+      for (var s = k - 1; s >= 0; s--) out.push(CH[(z - s + CH.length) % CH.length]);
+      return out;
+    }
+    function show(word) {
+      var target = pad(word).split('');
+      return Promise.all(cells.map(function (cell, i) {
+        var steps = path(cell.ch, target[i]);
+        return new Promise(function (r) { setTimeout(r, i * 28); }).then(function run() {
+          if (!steps.length) return;
+          return flip(cell, steps.shift()).then(run);
+        });
+      }));
+    }
+    var w = 0;
+    (function loop() {
+      setTimeout(function () {
+        if (document.hidden) return loop();
+        w = (w + 1) % words.length; show(words[w]).then(loop);
+      }, w === 0 ? 3200 : 2400);
+    })();
+  })();
+</script>
+</body>
+</html>
