@@ -1,0 +1,95 @@
+---
+import profile from '../data/profile.json';
+
+const { person, sections } = profile;
+const copy = sections.contact;
+const linkedin = person.links.find((l) => l.label === 'LinkedIn')?.url;
+const initials = person.name.split(' ').map((w) => w[0]).join('');
+const mailto = `mailto:${person.email}?subject=${encodeURIComponent(`Hello ${person.name.split(' ')[0]}`)}`;
+const [r1 = [], r2 = [], r3 = [], r4 = []] = copy.billboardRows;
+---
+
+<section class="contact wrap" id="contact" aria-labelledby="contact-h" data-reveal>
+  <h2 class="bill" id="contact-h">
+    <span class="sr-only">{copy.heading}</span>
+    <span class="bill-rows" aria-hidden="true">
+      <span class="bill-row">{r1.map((w) => <span>{w}</span>)} <span class="bk bk-lime" style="--d:0"><span class="bk-cursor"></span></span></span>
+      <span class="bill-row"><span class="bk bk-sun" style="--d:1"><svg viewBox="0 0 48 24"><path d="M14 4 4 12l10 8M34 4l10 8-10 8M27 2l-6 20" /></svg></span> {r2.map((w) => <span>{w}</span>)}</span>
+      <span class="bill-row">{r3.map((w) => <span>{w}</span>)} <span class="bk bk-sky" style="--d:2"></span></span>
+      <span class="bill-row"><span class="bk bk-mark" style="--d:3">{initials}/</span> <span class="bk bk-lime bk-fill" style="--d:4"></span> {r4.map((w) => <span>{w}</span>)}</span>
+    </span>
+  </h2>
+  <p>{copy.intro}</p>
+  <div class="actions">
+    {linkedin && (
+      <a class="btn li press" href={linkedin} target="_blank" rel="noopener noreferrer">
+        <svg class="li-bug" viewBox="0 0 24 24" aria-hidden="true"><rect width="24" height="24" rx="4" fill="#fff" /><path fill="#0a66c2" d="M5.3 9.2h2.9v9.4H5.3zM6.8 4.6a1.7 1.7 0 1 1 0 3.4 1.7 1.7 0 0 1 0-3.4zM10.1 9.2h2.8v1.3c.4-.7 1.4-1.5 2.8-1.5 3 0 3.5 2 3.5 4.5v5.1h-2.9v-4.5c0-1.1 0-2.5-1.5-2.5s-1.8 1.2-1.8 2.4v4.6h-2.9z" /></svg>
+        {copy.linkedinLabel}<span class="sr-only"> (opens in a new tab)</span>
+      </a>
+    )}
+    <a class="btn matte press copy" href={mailto} data-copy={person.email} data-copied-label={copy.copiedLabel}>
+      <svg class="i-copy" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="9" width="11" height="11" rx="2" /><path d="M5 15V6a2 2 0 0 1 2-2h8" /></svg>
+      <svg class="i-done" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" /></svg>
+      <span data-copy-label>{copy.copyLabel}</span>
+    </a>
+    <span class="sr-only" role="status" data-copy-status></span>
+  </div>
+</section>
+
+<style>
+  .contact { padding-block: var(--section); display: grid; gap: 1.75rem; }
+  .contact p { font-size: var(--s-lead); max-width: 40ch; }
+  .bill { font: 400 clamp(2.5rem, 12vw, 9.5rem)/.86 var(--display); letter-spacing: -.01em; text-transform: uppercase; }
+  .bill-rows { display: grid; gap: .1em; }
+  .bill-row { display: flex; flex-wrap: wrap; align-items: center; gap: .08em .22em; }
+  .bk {
+    flex: 1 1 1.4em; min-width: 1.4em; height: .78em; display: grid; place-items: center;
+    color: #0b0c0e; font-size: 1em; letter-spacing: -.02em;
+  }
+  .bk-lime { background: #c6ff3d; }
+  .bk-fill { flex-basis: 0; min-width: 0; }
+  .bk-sun { background: #c4774f; }
+  .bk-sky { background: #7aa7ff; }
+  .bk-mark { flex: 0 0 auto; padding-inline: .12em; background: var(--ink); color: var(--ground); font-size: .62em; height: 1.26em; }
+  .bk svg { height: .42em; width: auto; fill: none; stroke: currentColor; stroke-width: 3.5; stroke-linecap: square; }
+  .bk-cursor { width: .16em; height: .46em; background: currentColor; animation: blink 1s steps(2, start) infinite; }
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .bk { transform-origin: left; animation: wipe linear both; animation-timeline: view(); animation-range: entry calc(20% + var(--d, 0) * 8%) cover calc(35% + var(--d, 0) * 4%); }
+      .bill-row:nth-child(even) .bk { transform-origin: right; }
+    }
+  }
+  @keyframes wipe { from { transform: scaleX(0); } }
+
+  .actions { margin-top: 1.75rem; display: flex; flex-wrap: wrap; gap: .75rem; }
+  .btn.li { background: #0a66c2; color: #fff; font-weight: 600; padding-left: 1rem; }
+  .btn.li:hover { background: #004182; color: #fff; }
+  .btn.li .li-bug { width: 1.4rem; height: 1.4rem; stroke: none; }
+  .btn.li:focus-visible { outline-color: #70b5f9; }
+  .copy .i-done { display: none; }
+  .copy.copied .i-copy { display: none; }
+  .copy.copied .i-done { display: block; color: var(--m-accent); }
+</style>
+
+<script>
+  const a = document.querySelector<HTMLAnchorElement>('[data-copy]');
+  if (a && navigator.clipboard) {
+    const label = a.querySelector('[data-copy-label]')!;
+    const status = document.querySelector('[data-copy-status]')!;
+    const idle = label.textContent;
+    let t = 0;
+    a.addEventListener('click', (e) => {
+      e.preventDefault();
+      navigator.clipboard.writeText(a.dataset.copy!).then(
+        () => {
+          a.classList.add('copied');
+          label.textContent = a.dataset.copiedLabel ?? idle;
+          status.textContent = 'Email address copied to the clipboard';
+          clearTimeout(t);
+          t = window.setTimeout(() => { a.classList.remove('copied'); label.textContent = idle; status.textContent = ''; }, 2200);
+        },
+        () => { location.href = a.href; },
+      );
+    });
+  }
+</script>

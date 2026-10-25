@@ -1,0 +1,100 @@
+---
+import profile from '../data/profile.json';
+import { year } from '../lib/dates';
+import { logoMeta } from '../lib/logos';
+
+const { experience, sections } = profile;
+const jobs = experience.filter((e) => !e.hidden);
+const copy = sections.trustedBy;
+---
+
+<section class="trusted glass rise" style="--d:.75s" aria-labelledby="trusted-h">
+  <h2 id="trusted-h">{copy.heading}</h2>
+  <details>
+    <summary class="matte press">
+      <span class="names" aria-hidden="true">
+        {jobs.filter((j) => j.logo).map((j) => {
+          const m = logoMeta(j.logo!.onDark);
+          return <img class:list={['logo', m.size]} src={j.logo!.onDark} alt="" width={m.width} height={m.height} />;
+        })}
+      </span>
+      <span class="toggle">
+        <span class="t-labels" aria-hidden="true"><span class="t-open">{copy.showLabel}</span><span class="t-close">{copy.hideLabel}</span></span>
+        <svg class="chev" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9l6 6 6-6" /></svg>
+        <span class="sr-only">Roles and dates</span>
+      </span>
+    </summary>
+  </details>
+  <ul class="roles" style={`--n:${jobs.length}`}>
+    {jobs.map((j) => {
+      const logo = j.logo && logoMeta(j.logo.onDark);
+      const client = j.client?.logo && logoMeta(j.client.logo.onDark);
+      return (
+        <li class:list={{ current: j.end === null }}>
+          <span class="co">
+            {logo ? <img class:list={['logo', logo.size]} src={j.logo!.onDark} alt={j.company} width={logo.width} height={logo.height} /> : <span class="co-name">{j.company}</span>}
+            {j.client && (
+              <span class="client">
+                <span class="for">for</span>
+                {client ? <img class:list={['logo', client.size]} src={j.client.logo!.onDark} alt={j.client.name} width={client.width} height={client.height} /> : <span>{j.client.name}</span>}
+              </span>
+            )}
+          </span>
+          <span class="title">{j.role}</span>
+          <span class="years">
+            <time datetime={j.start}>{year(j.start)}</time>–{j.end ? <time datetime={j.end}>{year(j.end)}</time> : 'now'}
+          </span>
+        </li>
+      );
+    })}
+  </ul>
+</section>
+
+<style>
+  .trusted { border-radius: 22px; padding: 1rem; }
+  .trusted h2 { font-size: var(--s-body); color: var(--g-muted); font-weight: 600; }
+  summary {
+    list-style: none; cursor: pointer; margin-top: .75rem;
+    display: flex; align-items: center; justify-content: space-between; gap: 1rem;
+    min-height: 56px; padding: .5rem .5rem .5rem 1rem; border-radius: 16px;
+  }
+  summary::-webkit-details-marker { display: none; }
+  .names { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.1rem; }
+  .names .lg-et { height: 32px; } .names .lg-ac { height: 20px; } .names .lg-nc { height: 15px; }
+  .toggle {
+    display: inline-flex; align-items: center; gap: .4rem; flex-shrink: 0;
+    font-size: var(--s-small); color: var(--m-accent);
+    height: 40px; padding: 0 .9rem; border-radius: 999px; background: #0e0f11; box-shadow: var(--m-well);
+  }
+  .t-labels { display: grid; } .t-labels > * { grid-area: 1/1; }
+  details[open] .t-open, details:not([open]) .t-close { visibility: hidden; }
+  .chev { width: 14px; height: 14px; fill: none; stroke: currentColor; stroke-width: 2.5; transition: transform .3s var(--ease); }
+  details[open] .chev { transform: rotate(180deg); }
+  details[open] .names { display: none; }
+  details:not([open]) + .roles { display: none; }
+  .roles { list-style: none; margin: 0; padding: 1rem 0 0; display: grid; grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+  .roles li { display: grid; gap: .2rem; align-content: start; padding: .9rem 1rem; border-radius: 14px; }
+  .roles li.current { background: var(--ground); }
+  .co { display: flex; align-items: center; flex-wrap: wrap; gap: .5rem .9rem; min-height: 48px; margin-bottom: .35rem; }
+  .co-name { font: 400 var(--s-lead)/1 var(--display); text-transform: uppercase; }
+  .logo { display: block; width: auto; }
+  .lg-et { height: 44px; } .lg-ac { height: 25px; } .lg-eu { height: 17px; } .lg-nc { height: 17px; } .lg-in { height: 26px; }
+  .client { display: inline-flex; align-items: center; gap: .9rem; }
+  .for { font-size: var(--s-small); color: var(--g-muted); }
+  .title { font-size: var(--s-small); line-height: 1.35; }
+  .years { font-size: var(--s-small); color: var(--muted); font-variant-numeric: tabular-nums; }
+  .current .years { color: var(--accent); }
+
+  @media (min-width: 48rem) {
+    .trusted { padding: 1.5rem; }
+    .roles { grid-template-columns: repeat(var(--n, 3), minmax(0, 1fr)); gap: 1rem; }
+    .co { min-height: 60px; }
+    .lg-et { height: 56px; } .lg-ac { height: 32px; } .lg-eu { height: 21px; } .lg-nc { height: 21px; } .lg-in { height: 33px; }
+  }
+  @media (min-width: 64rem) {
+    .trusted { position: relative; z-index: 1; grid-column: 1 / -1; display: grid; grid-template-columns: 9rem 1fr; align-items: start; gap: 2rem; padding: 1.75rem 2rem; }
+    .trusted h2 { padding-top: .9rem; }
+    details { display: none; }
+    .roles, details:not([open]) + .roles { display: grid; padding-top: 0; }
+  }
+</style>

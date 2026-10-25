@@ -15,7 +15,17 @@
         "label": "LinkedIn",
         "url": "https://www.linkedin.com/in/dimsyrros/"
       }
-    ]
+    ],
+    "roleLines": [
+      "Tech Team Lead",
+      "Legacy code whisperer",
+      "Bridge to product",
+      "CityJS speaker",
+      "Slop detector"
+    ],
+    "photo": {
+      "alt": "Dimitris walking along a winding mountain road under a large orange sun"
+    }
   },
   "summary": "Results-driven Senior Front-end Engineer with years of hands-on experience in crafting intuitive user interfaces and web application development. Expertise in modern technologies including React.js, Next.js, and Redux, complemented by a deep understanding of the web application development life-cycle. Adept at collaborating closely with product owners, engineers, and diverse teams to drive product excellence. Passionate about optimizing front-end performance, continuous learning, and embracing new challenges to empower users with innovative software solutions.",
   "skills": [
@@ -82,9 +92,19 @@
     {
       "company": "Etraveli Group",
       "shortName": "Etraveli",
-      "spotlight": ["Leading the Redux Form → React Hook Form migration", "Spoke at CityJS on the migration", "Key engineer on the Dynamic Booking Flow", "Tech Team Lead of the new Payments team"],
-      "logo": { "onDark": "/logos/etraveli-group-dark.svg", "onLight": "/logos/etraveli-group-light.svg" },
+      "spotlight": [
+        "Leading the Redux Form → React Hook Form migration",
+        "Spoke at CityJS on the migration",
+        "Key engineer on the Dynamic Booking Flow",
+        "Tech Team Lead of the new Payments team"
+      ],
+      "story": "Started as a developer, now Tech Team Lead of the new Payments frontend team. I’m leading the Redux Form → React Hook Form migration, and told a CityJS meetup how it’s going. I’ve worked extensively on moving the codebase from JavaScript to TypeScript, was a key engineer on the new Dynamic Booking Flow, and built a 3-D Secure flow that makes sure payment failures are handled properly.",
+      "logo": {
+        "onDark": "/logos/etraveli-group-dark.svg",
+        "onLight": "/logos/etraveli-group-light.svg"
+      },
       "role": "Senior Frontend Developer – Tech Team Lead",
+      "shortRole": "Senior Frontend Developer, Tech Team Lead",
       "summary": "Tech Team Lead of the new Payments team, and leading the move from Redux Form to React Hook Form across the company.",
       "start": "2024-01",
       "end": null,
@@ -94,15 +114,35 @@
         "Leading the migration from Redux Forms to React Hook Form across the codebase, resolving a long-standing performance and maintainability issue affecting multiple teams. Presented the initiative at a CityJS Conference meetup, proudly representing the company.",
         "Playing a key role in building a Dynamic Booking Flow, collaborating with cross-domain teams to align technical solutions with broader business objectives.",
         "Reviewing peer code to uphold high-quality standards, and mentoring junior developers on best practices, code structure, and maintainable frontend development."
+      ],
+      "props": [
+        "boarding-pass",
+        "passport"
       ]
     },
     {
       "company": "Accenture",
       "shortName": "Accenture",
-      "spotlight": ["Built Eurobank’s e-banking platform", "Reusable components in React and Redux", "Peer reviews and onboarding", "Agile, side by side with the Product Owner"],
-      "logo": { "onDark": "/logos/accenture-dark.svg", "onLight": "/logos/accenture-light.svg" },
-      "client": { "name": "Eurobank", "logo": { "onDark": "/logos/eurobank-dark.svg", "onLight": "/logos/eurobank-light.svg" } },
+      "spotlight": [
+        "Built Eurobank’s e-banking platform",
+        "Reusable components in React and Redux",
+        "Peer reviews and onboarding",
+        "Agile, side by side with the Product Owner"
+      ],
+      "story": "Two years on Eurobank’s e-banking platform and its admin site, building modular, reusable React and Redux components that new features could stand on. I improved the code as I shipped, reviewed my peers’ work, helped new team members find their feet, and worked side by side with the Product Owner from the first development talks onward.",
+      "logo": {
+        "onDark": "/logos/accenture-dark.svg",
+        "onLight": "/logos/accenture-light.svg"
+      },
+      "client": {
+        "name": "Eurobank",
+        "logo": {
+          "onDark": "/logos/eurobank-dark.svg",
+          "onLight": "/logos/eurobank-light.svg"
+        }
+      },
       "role": "Application Development Senior Analyst",
+      "shortRole": "Senior Analyst",
       "summary": "Built modular, reusable React and Redux components for Eurobank’s e-banking platform and its admin website.",
       "start": "2022-02",
       "end": "2024-01",
@@ -114,15 +154,35 @@
         "Actively contributed to Agile ceremonies using established methodologies.",
         "Collaborated closely with the Product Owner and Facilitator Team Leader.",
         "Participated in preliminary development talks, facilitating seamless inter-departmental communication."
+      ],
+      "props": [
+        "card",
+        "receipt"
       ]
     },
     {
       "company": "Netcompany-Intrasoft",
       "shortName": "Netcompany",
-      "spotlight": ["Interfaces for Intralot’s Canvas betting platform", "React and Redux front ends", "Faster caching and WebSockets in Go and Redis", "PHP 7+ APIs following MVC"],
-      "logo": { "onDark": "/logos/netcompany-dark.svg", "onLight": "/logos/netcompany-light.svg" },
-      "client": { "name": "Intralot", "logo": { "onDark": "/logos/intralot-dark.svg", "onLight": "/logos/intralot-light.svg" } },
+      "spotlight": [
+        "Interfaces for Intralot’s Canvas betting platform",
+        "React and Redux front ends",
+        "Faster caching and WebSockets in Go and Redis",
+        "PHP 7+ APIs following MVC"
+      ],
+      "story": "Where it started: interfaces for Intralot’s Canvas, the betting software behind national betting providers around the world. I built front ends in React and Redux with Styled Components and SASS, wrote PHP 7+ APIs on the MVC pattern, and made caching and WebSockets faster with Go and Redis.",
+      "logo": {
+        "onDark": "/logos/netcompany-dark.svg",
+        "onLight": "/logos/netcompany-light.svg"
+      },
+      "client": {
+        "name": "Intralot",
+        "logo": {
+          "onDark": "/logos/intralot-dark.svg",
+          "onLight": "/logos/intralot-light.svg"
+        }
+      },
       "role": "Associate SW Engineer",
+      "shortRole": "Associate SW Engineer",
       "summary": "Built interfaces for Intralot’s Canvas betting software and tuned its caching and WebSockets with Go and Redis.",
       "start": "2019-04",
       "end": "2022-01",
@@ -132,7 +192,11 @@
         "Contributed to API development leveraging PHP 7+ and adhering to the MVC design pattern.",
         "Optimized caching and WebSocket mechanisms through Golang and Redis implementations."
       ],
-      "note": "Took a hiatus for mandatory army service at KEPYES from Jan 2020 to Sep 2020."
+      "note": "Took a hiatus for mandatory army service at KEPYES from Jan 2020 to Sep 2020.",
+      "props": [
+        "football",
+        "basketball"
+      ]
     },
     {
       "company": "Centre of Information Technology Support of the Hellenic Army (KEPYES)",
@@ -167,5 +231,55 @@
         ]
       }
     }
-  ]
+  ],
+  "sections": {
+    "nav": [
+      {
+        "label": "Work",
+        "href": "#work"
+      },
+      {
+        "label": "Contact",
+        "href": "#contact"
+      }
+    ],
+    "trustedBy": {
+      "heading": "Trusted by",
+      "showLabel": "Show roles",
+      "hideLabel": "Hide roles"
+    },
+    "work": {
+      "heading": "From betting to banking to flight booking",
+      "intro": "Seven years, multiple teams. Hover or tap a dot to see what I did there."
+    },
+    "contact": {
+      "heading": "Let’s build something that is a joy to use.",
+      "billboardRows": [
+        [
+          "Let’s",
+          "build"
+        ],
+        [
+          "something"
+        ],
+        [
+          "that",
+          "is",
+          "a"
+        ],
+        [
+          "joy",
+          "to",
+          "use."
+        ]
+      ],
+      "intro": "I’m happy to talk about front-end roles, migrations and performance work.",
+      "linkedinLabel": "Follow me on LinkedIn",
+      "copyLabel": "Copy email",
+      "copiedLabel": "Email copied"
+    },
+    "footer": {
+      "tagline": "Senior front-end engineer"
+    }
+  }
 }

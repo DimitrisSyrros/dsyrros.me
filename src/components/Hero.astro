@@ -1,0 +1,154 @@
+---
+import { Picture } from 'astro:assets';
+import profile from '../data/profile.json';
+import road from '../assets/hero/road.webp';
+import TrustedBy from './TrustedBy.astro';
+
+const { person } = profile;
+const [first, ...rest] = person.name.split(' ');
+const lines = [first, rest.join(' ')];
+---
+
+<section class="hero wrap glow" aria-labelledby="hero-name">
+  <div class="hero-copy">
+    <h1 id="hero-name">
+      {lines.map((line, i) => <span class="line"><span style={`--d:${0.1 + i * 0.11}s`}>{line}</span></span>)}
+    </h1>
+    <p class="role rise" style="--d:.45s">
+      <span class="board" aria-hidden="true" data-flap data-lines={JSON.stringify(person.roleLines)}>{person.jobTitle}</span>
+      <span class="sr-only">{person.jobTitle}</span>
+    </p>
+    <p class="lede rise" style="--d:.55s">{person.tagline}</p>
+  </div>
+
+  <figure class="poster rise" style="--d:.35s">
+    <Picture
+      src={road}
+      formats={['avif', 'webp']}
+      fallbackFormat="webp"
+      widths={[480, 640, 800, 1200, 1600]}
+      sizes="(min-width: 64rem) 46vw, (min-width: 48rem) 36rem, 100vw"
+      alt={person.photo.alt}
+      loading="eager"
+      fetchpriority="high"
+    />
+  </figure>
+
+  <TrustedBy />
+</section>
+
+<style>
+  .hero { min-height: calc(100svh - 76px); display: grid; align-content: end; gap: 2.5rem; padding-bottom: 2rem; }
+  .hero::before { width: 40rem; height: 40rem; right: -12rem; top: 10%; }
+  .hero::after { width: 24rem; height: 24rem; left: 30%; bottom: -6rem; opacity: .5; }
+  h1 { font: 400 var(--s-display)/.86 var(--display); letter-spacing: -.01em; text-transform: uppercase; }
+  .line { display: block; overflow: hidden; padding-bottom: .06em; }
+  .line > span { display: block; }
+  :global(.js) .line > span { animation: mask 1s var(--ease) both; animation-delay: var(--d, 0s); }
+  .role { margin-top: 1.25rem; font-size: var(--s-lead); color: var(--accent); min-height: 1.6em; }
+  .lede { margin-top: 1rem; max-width: 36ch; font-size: var(--s-lead); line-height: 1.45; }
+
+  .board { display: inline-flex; gap: max(2px, .1em); text-transform: uppercase; font-weight: 600;
+    font-size: min(1.875rem, calc((100vw - 2 * var(--gutter)) / var(--cells, 25) / .86)); }
+  .board:not(.on) { text-transform: none; font-weight: 400; }
+  .board :global(.cell) { position: relative; width: .72em; height: 1.3em; perspective: 12em; color: var(--m-accent); }
+  .board :global(.half), .board :global(.flap) { position: absolute; left: 0; right: 0; height: calc(50% - 1px); overflow: hidden; background: #232428; border-radius: 3px; }
+  .board :global(.half > span), .board :global(.flap > span) { display: block; height: 1.3em; line-height: 1.3em; text-align: center; }
+  .board :global(.top), .board :global(.flap.t) { top: 0; border-bottom-left-radius: 1px; border-bottom-right-radius: 1px; }
+  .board :global(.bot), .board :global(.flap.b) { bottom: 0; border-top-left-radius: 1px; border-top-right-radius: 1px; background: #2a2b30; }
+  .board :global(.bot > span), .board :global(.flap.b > span) { transform: translateY(calc(-50% - 1px)); }
+  .board :global(.flap.t) { transform-origin: 50% 100%; z-index: 2; backface-visibility: hidden; }
+  .board :global(.flap.b) { transform-origin: 50% 0; z-index: 2; backface-visibility: hidden; }
+
+  .poster { margin: 0 calc(-1 * var(--gutter)); width: calc(100% + 2 * var(--gutter)); }
+  .poster :global(img) {
+    display: block; width: 100%; height: auto;
+    -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%); mask-image: linear-gradient(to bottom, #000 72%, transparent 100%);
+  }
+  @media (min-width: 48rem) { .poster { margin: 0; justify-self: center; width: min(100%, 36rem); } }
+
+  @media (min-width: 64rem) {
+    .hero { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr); align-items: end; }
+    .hero-copy { position: relative; z-index: 1; padding-bottom: 1rem; }
+    .poster {
+      position: absolute; z-index: 0; margin: 0; pointer-events: none;
+      right: 0; bottom: 10rem; width: min(46vw, (100svh - 76px - 10rem) * .89);
+    }
+    .poster :global(img) {
+      -webkit-mask-image: linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, transparent 0, rgb(0 0 0 / .55) 7%, #000 18%);
+      -webkit-mask-composite: source-in;
+      mask-image: linear-gradient(to bottom, #000 72%, transparent 100%), linear-gradient(to right, transparent 0, rgb(0 0 0 / .55) 7%, #000 18%);
+      mask-composite: intersect;
+    }
+  }
+  @media (min-width: 64rem) and (max-width: 79.99rem) {
+    .poster { bottom: 13rem; width: min(46vw, (100svh - 76px - 13rem) * .89); }
+  }
+</style>
+
+<script>
+  const board = document.querySelector<HTMLElement>('[data-flap]');
+  if (board) {
+    const words = [board.textContent ?? '', ...JSON.parse(board.dataset.lines ?? '[]')];
+    const CH = " ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.'/";
+    const n = Math.max(...words.map((w) => w.length));
+    const pad = (w: string) => w.toUpperCase().padEnd(n, ' ');
+    const still = matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    board.textContent = '';
+    board.style.setProperty('--cells', String(n));
+    board.classList.add('on');
+    const cells = [...pad(words[0])].map((c) => {
+      const el = document.createElement('span');
+      el.className = 'cell';
+      el.innerHTML = '<span class="half top"><span></span></span><span class="half bot"><span></span></span>';
+      board.appendChild(el);
+      const top = el.firstElementChild!.firstElementChild as HTMLElement;
+      const bot = el.lastElementChild!.firstElementChild as HTMLElement;
+      top.textContent = bot.textContent = c;
+      return { el, top, bot, ch: c };
+    });
+
+    const HALF = 55;
+    const flap = (cls: string, text: string) => {
+      const s = document.createElement('span');
+      s.className = `flap ${cls}`;
+      s.innerHTML = '<span></span>';
+      s.firstElementChild!.textContent = text;
+      return s;
+    };
+    const flip = (cell: (typeof cells)[number], next: string) => {
+      const t = flap('t', cell.ch), b = flap('b', next);
+      cell.ch = next;
+      cell.top.textContent = next;
+      cell.el.append(t, b);
+      b.style.transform = 'rotateX(90deg)';
+      t.animate([{ transform: 'rotateX(0)' }, { transform: 'rotateX(-90deg)', filter: 'brightness(.6)' }], { duration: HALF, easing: 'ease-in', fill: 'forwards' });
+      return b.animate([{ transform: 'rotateX(90deg)', filter: 'brightness(1.4)' }, { transform: 'rotateX(0)' }], { duration: HALF, delay: HALF, easing: 'ease-out', fill: 'forwards' })
+        .finished.then(() => { cell.bot.textContent = next; t.remove(); b.remove(); });
+    };
+    const path = (from: string, to: string) => {
+      const a = Math.max(0, CH.indexOf(from)), z = Math.max(0, CH.indexOf(to));
+      if (a === z) return [];
+      const dist = (z - a + CH.length) % CH.length;
+      const k = Math.min(dist, 4 + Math.floor(Math.random() * 5));
+      return Array.from({ length: k }, (_, s) => CH[(z - (k - 1 - s) + CH.length) % CH.length]);
+    };
+    const show = (word: string) => {
+      const target = [...pad(word)];
+      return Promise.all(cells.map(async (cell, i) => {
+        await new Promise((r) => setTimeout(r, i * 28));
+        for (const c of path(cell.ch, target[i])) await flip(cell, c);
+      }));
+    };
+
+    if (!still) {
+      let w = 0;
+      const loop = () => setTimeout(async () => {
+        if (!document.hidden) { w = (w + 1) % words.length; await show(words[w]); }
+        loop();
+      }, w === 0 ? 3200 : 2400);
+      loop();
+    }
+  }
+</script>

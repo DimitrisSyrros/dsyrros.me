@@ -1,0 +1,192 @@
+---
+import { Picture } from 'astro:assets';
+import profile from '../data/profile.json';
+import { monthYear, year } from '../lib/dates';
+import { PROPS, propSizes } from '../lib/props';
+
+const { experience, sections } = profile;
+const jobs = experience.filter((e) => !e.hidden);
+const copy = sections.work;
+---
+
+<section class="work wrap glow" id="work" aria-labelledby="work-h">
+  <div class="work-head" data-reveal>
+    <h2 class="big" id="work-h">{copy.heading}</h2>
+    <p>{copy.intro}</p>
+  </div>
+
+  <ol class="tl" data-tl style={`--count:${jobs.length}`}>
+    <li class="tl-track" aria-hidden="true"><span class="tl-fill"></span></li>
+    {jobs.map((job, i) => (
+      <li class="tl-item" data-tl-item data-current={job.end === null ? '' : undefined}>
+        <button class="tl-btn" type="button" aria-expanded="false" aria-controls={`tl-${i}`}>
+          <span class="tl-dot" aria-hidden="true"></span>
+          <span class="tl-text">
+            <span class="tl-year">{year(job.start)}</span>
+            <span class="tl-co">{job.company.replace(/-.*$/, '')}</span>
+            <span class="tl-role">{job.shortRole ?? job.role}</span>
+          </span>
+        </button>
+        <div class="tl-body glass" id={`tl-${i}`}>
+          {job.props && job.props.length > 0 && (
+            <div class="props" aria-hidden="true">
+              {job.props.filter((name) => PROPS[name]).map((name) => {
+                const p = PROPS[name];
+                return (
+                  <Picture
+                    src={p.src}
+                    formats={['avif', 'webp']}
+                    fallbackFormat="webp"
+                    widths={[160, 240, 320, 480, 640]}
+                    sizes={propSizes(p)}
+                    alt=""
+                    loading="lazy"
+                    decoding="async"
+                    class:list={['prop', `p-${name}`]}
+                    style={`--f:${p.f};--ps:${p.ps};--pt:${p.pt};--pb:${p.pb};--wm:${p.w};--wd:${p.wd}`}
+                  />
+                );
+              })}
+            </div>
+          )}
+          <span class="when">
+            <time datetime={job.start}>{monthYear(job.start)}</time>
+            {job.end ? <>–<time datetime={job.end}>{monthYear(job.end)}</time></> : ' to now'}
+          </span>
+          <p class="tl-story">{job.story ?? job.summary}</p>
+        </div>
+      </li>
+    ))}
+  </ol>
+</section>
+
+<style>
+  .work { padding-block: var(--section); }
+  .work::before { width: 36rem; height: 36rem; right: 8%; top: 35%; }
+  .work::after { width: 22rem; height: 22rem; right: 40%; top: 18rem; opacity: .7; }
+  .work-head { display: grid; gap: 1rem; max-width: 40rem; }
+  h2.big { font: 400 min(var(--s-head), 7.2vw)/.9 var(--display); letter-spacing: -.01em; text-transform: uppercase; }
+  .work-head p { font-size: var(--s-lead); line-height: 1.45; }
+
+  .tl { position: relative; list-style: none; margin: 3rem 0 0; padding: 0 0 0 2.25rem; display: grid; gap: .5rem; }
+  .tl-track { position: absolute; left: 13px; top: 8px; bottom: 8px; width: 4px; border-radius: 4px; background: var(--surface); }
+  .tl-fill { position: absolute; inset: 0; border-radius: inherit; background: var(--accent); transform-origin: top; }
+  .tl-item { position: relative; }
+  .tl-text { display: contents; }
+  .tl-btn {
+    all: unset; box-sizing: border-box; cursor: pointer; width: 100%;
+    display: grid; grid-template-columns: 4.5rem 1fr; gap: .1rem 1rem; align-items: baseline;
+    padding: .75rem 0; min-height: 52px; border-radius: 10px;
+  }
+  .tl-btn:focus-visible { outline: 3px solid var(--accent); outline-offset: 4px; }
+  .tl-dot {
+    position: absolute; left: calc(-2.25rem + 3px); top: 1rem; width: 24px; height: 24px; border-radius: 50%;
+    background: #2a2c30; box-shadow: inset 0 1px 0 #ffffff1f, inset 0 -2px 0 #00000080, 0 3px 8px #00000080;
+    display: grid; place-items: center; transition: transform .3s var(--ease);
+  }
+  .tl-dot::after { content: ""; width: 8px; height: 8px; border-radius: 50%; background: var(--m-muted); transition: background .2s, transform .2s; }
+  .is-active .tl-dot::after { background: var(--m-accent); transform: scale(1.3); }
+  .tl-btn:hover .tl-dot { transform: scale(1.12); }
+  .tl-year { font: 400 var(--s-lead)/1.2 var(--display); font-variant-numeric: tabular-nums; color: var(--muted); }
+  .is-active .tl-year { color: var(--accent); }
+  .tl-co { font: 400 var(--s-lead)/1.2 var(--display); letter-spacing: -.005em; text-transform: uppercase; }
+  .tl-role { grid-column: 2; font-size: var(--s-small); color: var(--muted); }
+  .tl-body { position: relative; border-radius: 22px; padding: 5.25rem 1.25rem 4.5rem; margin: .25rem 0 1rem; display: grid; gap: 1rem; }
+  .tl-body .when { color: var(--g-accent); font-size: var(--s-small); }
+  .tl-story { color: var(--g-ink); font-size: 1.125rem; line-height: 1.5; max-width: 48ch; }
+  :global(.js) .tl-item:not(.is-active) .tl-body { display: none; }
+
+  .props { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+  .props :global(.prop) {
+    --w: var(--wm); position: absolute; display: block; height: auto; transform: rotate(var(--r, 0deg)); will-change: transform;
+    width: calc(var(--w) * var(--f)); margin: calc(var(--w) * var(--pt) * -1) calc(var(--w) * var(--ps) * -1) calc(var(--w) * var(--pb) * -1);
+    animation: bob var(--dur, 6s) ease-in-out var(--del, 0s) infinite alternate;
+  }
+  @keyframes bob { from { transform: translateY(0) rotate(var(--r, 0deg)); } to { transform: translateY(-10px) rotate(calc(var(--r, 0deg) + 3deg)); } }
+  .props :global(.p-boarding-pass) { top: .5rem; right: -.25rem; --r: -7deg; }
+  .props :global(.p-passport) { bottom: -1.5rem; right: 1.25rem; --r: 11deg; --dur: 7s; --del: -2s; }
+  .props :global(.p-card) { top: .5rem; right: -.25rem; --r: 8deg; }
+  .props :global(.p-receipt) { bottom: -1.75rem; right: 1.25rem; --r: -5deg; --dur: 7.5s; --del: -3s; }
+  .props :global(.p-football) { top: .25rem; right: .75rem; --dur: 5.5s; }
+  .props :global(.p-basketball) { bottom: -1.75rem; right: 1rem; --r: -6deg; --dur: 7s; --del: -4s; }
+
+  @supports (animation-timeline: view()) {
+    @media (prefers-reduced-motion: no-preference) {
+      .tl-fill { animation: fill linear both; animation-timeline: view(); animation-range: entry 10% cover 55%; }
+      .tl-btn { animation: reveal linear both; animation-timeline: view(); animation-range: entry 0% entry 80%; }
+    }
+  }
+  @keyframes fill { from { transform: scaleY(0); } }
+
+  :global(.js) .tl.flip .is-active .tl-body { transform-origin: top; animation: flip-down .55s var(--ease) both; }
+  @keyframes flip-down { from { opacity: 0; transform: perspective(1200px) rotateX(-70deg); } }
+
+  @media (min-width: 64rem) {
+    :global(.js) .tl {
+      --spine: 9.5rem; --gap: 2.5rem;
+      padding: 0; margin-top: 4rem; display: grid; align-items: center;
+      grid-template-columns: 25rem minmax(0, 1fr); column-gap: var(--gap); grid-auto-rows: minmax(8rem, auto);
+    }
+    :global(.js) .tl-track { left: calc(var(--spine) - 2px); top: 0; bottom: 0; }
+    :global(.js) .tl-item { display: contents; }
+    :global(.js) .tl-btn { grid-column: 1; position: relative; display: grid; grid-template-columns: calc(var(--spine) - 1.5rem) 3rem 1fr; column-gap: 0; padding: .75rem 0; }
+    :global(.js) .tl-dot { left: calc(var(--spine) - 12px); top: calc(50% - 12px); }
+    :global(.js) .tl-text { display: grid; gap: .15rem; grid-column: 3; grid-template-columns: auto 1fr; column-gap: 1rem; }
+    :global(.js) .tl-text > span { grid-column: 1; }
+    :global(.js) .tl-item:nth-child(even) .tl-text { margin-left: .5rem; }
+    :global(.js) .tl-item:nth-child(odd) .tl-text { margin-right: .5rem; grid-column: 1; justify-self: end; text-align: right; grid-template-columns: auto; }
+    :global(.js) .tl-role { grid-column: auto; }
+    :global(.js) .tl-item:nth-child(odd).is-active .tl-btn::after,
+    :global(.js) .tl-item:nth-child(even).is-active .tl-text::after {
+      content: ""; height: 4px;
+      background: repeating-linear-gradient(90deg, var(--accent) 0 10px, transparent 10px 18px);
+    }
+    :global(.js) .tl-item:nth-child(odd).is-active .tl-btn::after { position: absolute; top: calc(50% - 2px); left: calc(var(--spine) + 12px); right: calc(-1 * var(--gap)); }
+    :global(.js) .tl-item:nth-child(even).is-active .tl-text::after { grid-column: 2; grid-row: 1 / span 3; align-self: center; margin-right: calc(-1 * var(--gap)); }
+    :global(.js) .tl-body { grid-column: 2; grid-row: 1 / span var(--count); align-self: stretch; margin: 0; padding: 2.5rem 3rem 4rem; align-content: start; gap: 1.75rem; }
+    :global(.js) .tl-item:not(.is-active) .tl-body { display: grid; visibility: hidden; }
+    :global(.js) .tl-body .when { font-size: var(--s-body); }
+    :global(.js) .tl-story { padding-right: clamp(8rem, 15vw, 15rem); font-size: clamp(1.25rem, 1rem + .45vw, 1.5rem); max-width: none; }
+    :global(.js) .tl.flip .is-active .tl-body { transform-origin: center; animation: flip-in .6s var(--ease) .2s both; }
+    :global(.js) .tl.flip .was-active .tl-body { transform-origin: center; animation: flip-out .2s var(--ease) both; }
+
+    .props :global(.prop) { --w: var(--wd); }
+    .props :global(.p-boarding-pass) { top: -2.75rem; right: -2.25rem; }
+    .props :global(.p-passport) { bottom: -3rem; right: 3rem; }
+    .props :global(.p-card) { top: -2.75rem; right: -2.25rem; }
+    .props :global(.p-receipt) { bottom: -3rem; right: 3rem; }
+    .props :global(.p-football) { top: -3rem; right: clamp(7rem, 12vw, 12rem); }
+    .props :global(.p-basketball) { bottom: -3rem; right: clamp(4.5rem, 9vw, 9rem); }
+  }
+  @keyframes flip-in { from { opacity: 0; transform: perspective(1600px) rotateX(90deg); } }
+  @keyframes flip-out { from { visibility: visible; } to { visibility: hidden; opacity: 0; transform: perspective(1600px) rotateX(-90deg); } }
+
+  @media (min-width: 80rem) {
+    :global(.js) .tl { --spine: 10rem; grid-template-columns: 26rem minmax(0, 1fr); max-width: 88rem; margin-inline: auto; }
+    :global(.js) .tl-body { padding: 3.5rem 4rem; }
+  }
+</style>
+
+<script>
+  document.querySelectorAll<HTMLElement>('[data-tl]').forEach((tl) => {
+    const items = [...tl.querySelectorAll<HTMLElement>('[data-tl-item]')];
+    const hover = matchMedia('(hover: hover)');
+    const set = (li: HTMLElement) => {
+      if (li.classList.contains('is-active')) return;
+      for (const x of items) {
+        const on = x === li;
+        x.classList.toggle('was-active', x.classList.contains('is-active'));
+        x.classList.toggle('is-active', on);
+        x.querySelector('.tl-btn')!.setAttribute('aria-expanded', String(on));
+      }
+    };
+    for (const li of items) {
+      const b = li.querySelector('.tl-btn')!;
+      li.addEventListener('mouseenter', () => { if (hover.matches) set(li); });
+      b.addEventListener('focus', () => set(li));
+      b.addEventListener('click', () => set(li));
+    }
+    set(items.find((x) => x.hasAttribute('data-current')) ?? items[0]);
+    tl.classList.add('flip');
+  });
+</script>

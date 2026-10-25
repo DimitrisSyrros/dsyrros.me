@@ -15,13 +15,26 @@ pnpm-debug.log*
 
 # environment variables
 .env
-.env.production
+.env.*
+!.env.example
 
-# macOS-specific files
+# OS and editor files
 .DS_Store
+Thumbs.db
+*.swp
 
 # jetbrains setting folder
 .idea/
 
 # taste-skill working files (direction sheets, inspector screenshots, draw history)
 .taste-skill/
+
+# AI tooling: installed third-party skills (restore from skills-lock.json) and personal settings
+.agents/
+.claude/skills/
+.claude/settings.local.json
+.claude/*.local.*
+
+# deploy tooling caches
+.vercel/
+.netlify/

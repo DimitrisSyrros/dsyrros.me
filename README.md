@@ -1,46 +1,43 @@
-# Astro Starter Kit: Basics
+# dsyrros.me
 
-```sh
-npm create astro@latest -- --template basics
-```
+Personal site of Dimitris Syrros, Senior Front-end Engineer. Live at **[dsyrros.me](https://dsyrros.me)**.
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+A single, dark-only page built with [Astro](https://astro.build): static HTML, self-hosted fonts, responsive AVIF/WebP images and a few small component scripts — no framework runtime. It scores 100 across Lighthouse Performance, Accessibility, Best Practices and SEO, and targets WCAG 2.2 AA.
 
-## 🚀 Project Structure
+## Editing content
 
-Inside of your Astro project, you'll see the following folders and files:
+All copy lives in [`src/data/profile.json`](src/data/profile.json): SEO meta, profile, experience, skills, education and section labels. Components only render from it, so content changes never touch code.
+
+- Dates are `YYYY-MM`; `"end": null` means present.
+- Experience entries with `"hidden": true` stay in the file but are not rendered.
+- Company logos are SVGs in `public/logos/`; timeline props are PNGs in `src/assets/props/`, registered in `src/lib/props.ts`.
+
+## Project structure
 
 ```text
-/
-├── public/
-│   └── favicon.svg
-├── src
-│   ├── assets
-│   │   └── astro.svg
-│   ├── components
-│   │   └── Welcome.astro
-│   ├── layouts
-│   │   └── Layout.astro
-│   └── pages
-│       └── index.astro
-└── package.json
+src/
+├── components/   Header, Hero, TrustedBy, Timeline, Contact, Footer
+├── data/         profile.json (single source of truth)
+├── layouts/      Layout.astro: head, SEO, Open Graph, JSON-LD
+├── lib/          date formatting, logo and prop metadata
+├── assets/       images optimised at build time
+└── styles/       global.css (tokens, fonts, base styles)
+public/           fonts, logos, og.jpg, robots.txt
+mockups/          design explorations the site was built from
 ```
 
-To learn more about the folder structure of an Astro project, refer to [our guide on project structure](https://docs.astro.build/en/basics/project-structure/).
+## Commands
 
-## 🧞 Commands
+Requires Node 22.12 or newer.
 
-All commands are run from the root of the project, from a terminal:
+| Command           | Action                                    |
+| :---------------- | :---------------------------------------- |
+| `npm install`     | Install dependencies                      |
+| `npm run dev`     | Start the dev server at `localhost:4321`  |
+| `npm run build`   | Build the static site to `dist/`          |
+| `npm run preview` | Serve the production build locally        |
+| `npm run check`   | Type-check components with `astro check`  |
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+## Standards
 
-## 👀 Want to learn more?
-
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Design, accessibility and SEO rules for working on the site are in [`AGENTS.md`](AGENTS.md).

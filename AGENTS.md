@@ -7,8 +7,9 @@ This is a **single-page website**. Every component, style, and content change mu
 - Never hardcode content in components; import the JSON (`import profile from '../data/profile.json'`) and render from it, so edits only ever touch that file.
 - Dates are stored as `YYYY-MM` (`end: null` = present) and formatted in components; order arrays the way they should appear on the page.
 - Components must handle optional fields (`description`, `note`, `thesis`) being absent and lists of any length.
-- Optional `logo` (`{ onDark, onLight }`, full-colour SVGs under `public/logos/`) and `client` (`{ name, logo }`) on experience entries; render both as `<img>` with the company name as `alt`, showing the variant that matches the active theme.
-- `spotlight` on experience entries is the short, recruiter-facing version shown in the timeline (full `highlights` stay as the CV source). Render spotlights as plain text: no bold, no colour blocks, normal sentence case (no uppercase).
+- Optional `logo` (`{ onDark, onLight }`, full-colour SVGs under `public/logos/`) and `client` (`{ name, logo }`) on experience entries; render both as `<img>` with the company name as `alt`. The site is dark-only, so use the `onDark` variant (`onLight` stays in the JSON for later).
+- `story` on experience entries is the recruiter-facing paragraph shown in the timeline panel, and `shortRole` is the role label under the company name; `role` (full title) is used in "Trusted by". `spotlight` and `highlights` stay as the CV source and are not rendered. Render stories as plain text: no bold, no colour blocks, normal sentence case (no uppercase).
+- `props` lists the floating object images for that entry's timeline panel (names map to files in `src/assets/props/`); `person.roleLines` feeds the split-flap role line; `sections` holds the remaining page copy (nav, headings, contact labels).
 - Entries with `"hidden": true` stay in the JSON but are not rendered anywhere on the page (timeline, "Trusted by", JSON-LD).
 
 ### Mobile-first & responsive
@@ -16,7 +17,7 @@ This is a **single-page website**. Every component, style, and content change mu
 - Use fluid units (`rem`, `%`, `clamp()`, `min()/max()`) and flexbox/grid; no fixed-width containers, no horizontal scroll at any width from 320px up.
 - Touch targets at least 44×44px; keep body text ≥ 1rem and line length ~45–75ch.
 - Use Astro's `<Image>`/`<Picture>` from `astro:assets` with explicit `width`/`height`, `alt`, responsive `sizes`, and `loading="lazy"` below the fold (eager + `fetchpriority="high"` for the hero/LCP image).
-- Respect `prefers-reduced-motion` and `prefers-color-scheme`.
+- Respect `prefers-reduced-motion`. The site is dark-only by design (no light theme, no toggle); set `color-scheme: dark`.
 
 ### Accessibility
 - Semantic HTML first: one `<h1>`, logical heading order, landmarks (`<header>`, `<nav>`, `<main id="main">`, `<footer>`), each page section a `<section>` with an `aria-labelledby` heading.

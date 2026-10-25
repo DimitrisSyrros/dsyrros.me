@@ -1,0 +1,32 @@
+---
+import profile from '../data/profile.json';
+
+const { person, sections } = profile;
+const initials = person.name.split(' ').map((w) => w[0]).join('');
+---
+
+<header class="bar wrap">
+  <a class="brand" href="#main">{initials}<span aria-hidden="true">/</span><span class="sr-only">, {person.name}, home</span></a>
+  <nav aria-label="Primary">
+    <ul class="links">
+      {sections.nav.map((item) => <li><a href={item.href}>{item.label}</a></li>)}
+      {person.links.map((link) => (
+        <li>
+          <a href={link.url} target="_blank" rel="noopener noreferrer">
+            {link.label}<span class="sr-only"> (opens in a new tab)</span>
+          </a>
+        </li>
+      ))}
+    </ul>
+  </nav>
+</header>
+
+<style>
+  .bar { display: flex; align-items: center; justify-content: space-between; gap: .75rem; padding-block: 1rem; }
+  .brand { font: 400 var(--s-lead)/1 var(--display); letter-spacing: -.01em; text-decoration: none; min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; }
+  .brand span { color: var(--accent); }
+  .links { display: none; list-style: none; margin: 0; padding: 0; gap: 1.5rem; }
+  .links a { text-decoration: none; font-size: var(--s-body); min-height: 44px; min-width: 44px; display: inline-flex; align-items: center; justify-content: center; }
+  .links a:hover { color: var(--accent); }
+  @media (min-width: 48rem) { .links { display: flex; } }
+</style>
