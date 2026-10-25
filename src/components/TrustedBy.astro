@@ -6,6 +6,10 @@ import { logoMeta } from '../lib/logos';
 const { experience, sections } = profile;
 const jobs = experience.filter((e) => !e.hidden);
 const copy = sections.trustedBy;
+// Collapsed (mobile/tablet) view previews only the latest role; the rest sit behind the toggle.
+const [latest] = jobs;
+const latestLogo = latest?.logo && logoMeta(latest.logo.onDark);
+const more = jobs.length - 1;
 ---
 
 <section class="trusted glass rise" style="--d:.75s" aria-labelledby="trusted-h">
@@ -13,10 +17,8 @@ const copy = sections.trustedBy;
   <details>
     <summary class="matte press">
       <span class="names" aria-hidden="true">
-        {jobs.filter((j) => j.logo).map((j) => {
-          const m = logoMeta(j.logo!.onDark);
-          return <img class:list={['logo', m.size]} src={j.logo!.onDark} alt="" width={m.width} height={m.height} />;
-        })}
+        {latestLogo ? <img class:list={['logo', latestLogo.size]} src={latest.logo!.onDark} alt="" width={latestLogo.width} height={latestLogo.height} /> : latest && <span class="co-name">{latest.company}</span>}
+        {more > 0 && <span class="more">+{more}</span>}
       </span>
       <span class="toggle">
         <span class="t-labels" aria-hidden="true"><span class="t-open">{copy.showLabel}</span><span class="t-close">{copy.hideLabel}</span></span>
@@ -59,10 +61,11 @@ const copy = sections.trustedBy;
     min-height: 56px; padding: .5rem .5rem .5rem 1rem; border-radius: 16px;
   }
   summary::-webkit-details-marker { display: none; }
-  .names { display: flex; flex-wrap: wrap; align-items: center; gap: .6rem 1.1rem; }
+  .names { display: flex; align-items: center; gap: .9rem; min-width: 0; }
+  .more { font-size: var(--s-small); color: var(--g-muted); font-variant-numeric: tabular-nums; }
   .names .lg-et { height: 32px; } .names .lg-ac { height: 20px; } .names .lg-nc { height: 15px; }
   .toggle {
-    display: inline-flex; align-items: center; gap: .4rem; flex-shrink: 0;
+    display: inline-flex; align-items: center; gap: .4rem; flex-shrink: 0; margin-left: auto;
     font-size: var(--s-small); color: var(--m-accent);
     height: 40px; padding: 0 .9rem; border-radius: 999px; background: #0e0f11; box-shadow: var(--m-well);
   }
